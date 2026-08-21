@@ -1,0 +1,59 @@
+<title>Digital Certificate</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<div id="message">
+    Loading certificate...
+</div>
+
+<div class="certificate" id="certificate">
+
+    <h1>Certificate of Achievement</h1>
+
+<p>This certificate is proudly presented to</p>
+
+<h2 id="recipientName">
+    Loading...
+</h2>
+
+<p>For successfully completing</p>
+
+<h3 id="courseName">
+    Loading...
+</h3>
+
+<p>
+    Certificate ID:
+    <strong id="certificateId"></strong>
+</p>
+
+<div id="qrcode"></div>
+
+<p>
+    Issue Date:
+    <span id="issueDate"></span>
+</p>
+
+<p>
+    Expiry Date:
+    <span id="expiryDate"></span>
+</p>
+
+<p>
+    Status:
+    <strong id="status"></strong>
+</p>
+
+<button onclick="printCertificate()">
+    Print Certificate
+</button>
+
+<button onclick="downloadCertificate()">
+    Download PDF
+</button>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="js/certificate.js"></script>

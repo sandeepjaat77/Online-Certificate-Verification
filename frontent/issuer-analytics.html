@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Issuer Analytics</title>
+
+    <link rel="stylesheet"
+        href="css/analytics.css">
+
+</head>
+
+<body>
+
+    <div class="analytics-container">
+
+        <h1>
+            Issuer Analytics
+        </h1>
+
+        <p id="message"></p>
+
+        <div class="analytics-cards">
+
+            <div class="analytics-card">
+
+                <h3>
+                    Total Certificates
+                </h3>
+
+                <h2 id="totalCertificates">
+                    0
+                </h2>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <h3>
+                    Total Verifications
+                </h3>
+
+                <h2 id="totalVerifications">
+                    0
+                </h2>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <h3>
+                    Valid Verifications
+                </h3>
+
+                <h2 id="validVerifications">
+                    0
+                </h2>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <h3>
+                    Expired Verifications
+                </h3>
+
+                <h2 id="expiredVerifications">
+                    0
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <button
+            id="backBtn"
+            onclick="goBack()"
+        >
+            Back to Dashboard
+        </button>
+
+
+        <button
+            id="logoutBtn"
+        >
+            Logout
+        </button>
+
+    </div>
+
+
+    <script src="js/issuer-analytics.js"></script>
+
+</body>
+
+</html>

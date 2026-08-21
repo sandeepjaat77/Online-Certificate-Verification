@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Verify Certificate</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            Certificate Verification
+        </div>
+
+        <div class="nav-links">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="login.html">
+                Login
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <div class="verify-container">
+
+        <h1>
+            Verify Certificate
+        </h1>
+
+        <p>
+            Enter the Certificate ID to verify
+            the certificate.
+        </p>
+
+
+        <form id="verifyForm">
+
+            <input
+                type="text"
+                id="certificateId"
+                placeholder="Enter Certificate ID"
+                required
+            >
+
+            <button type="submit">
+                Verify Certificate
+            </button>
+
+        </form>
+
+
+        <div id="message"></div>
+
+        <div id="certificateResult"></div>
+
+    </div>
+
+
+    <script src="js/verify.js"></script>
+
+</body>
+
+</html>

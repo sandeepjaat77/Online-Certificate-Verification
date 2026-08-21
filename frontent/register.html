@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Register</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+
+    <!-- Navbar -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            Certificate Verification
+        </div>
+
+        <div class="nav-links">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="login.html">
+                Login
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Register Form -->
+
+    <div class="form-container">
+
+        <h1>
+            Create Account
+        </h1>
+
+        <form id="registerForm">
+
+
+            <!-- Name -->
+
+            <label>
+                Full Name
+            </label>
+
+            <input
+                type="text"
+                id="name"
+                placeholder="Enter your full name"
+                required
+            >
+
+
+            <!-- Email -->
+
+            <label>
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter your email"
+                required
+            >
+
+
+            <!-- Password -->
+
+            <label>
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                required
+            >
+
+
+            <!-- Role -->
+
+            <label>
+                Select Role
+            </label>
+
+            <select id="role">
+
+                <option value="recipient">
+                    Recipient
+                </option>
+
+                <option value="issuer">
+                    Issuer
+                </option>
+
+            </select>
+
+
+            <!-- Submit -->
+
+            <button type="submit">
+                Register
+            </button>
+
+        </form>
+
+
+        <!-- Message -->
+
+        <p id="message"></p>
+
+
+        <p class="account-text">
+
+            Already have an account?
+
+            <a href="login.html">
+                Login
+            </a>
+
+        </p>
+
+    </div>
+
+
+    <script src="js/register.js"></script>
+
+</body>
+
+</html>

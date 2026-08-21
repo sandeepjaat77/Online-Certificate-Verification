@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Issuer Dashboard</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            Certificate Verification
+        </div>
+
+        <div class="nav-links">
+
+            <a href="index.html">Home</a>
+
+            <a href="login.html" id="logoutBtn">Logout</a>
+
+        </div>
+
+    </nav>
+
+
+    <main class="dashboard-container">
+
+        <h1>Issuer Dashboard</h1>
+
+        <h2 id="welcomeMessage">
+            Welcome
+        </h2>
+
+        <div class="dashboard-cards">
+
+            <div class="dashboard-card">
+
+                <h2>Create Certificate</h2>
+
+                <p>
+                    Create and issue a new certificate.
+                </p>
+
+                <a href="create-certificate.html" class="btn">
+                    Create Certificate
+                </a>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <h2>My Certificates</h2>
+
+                <p>
+                    View all certificates issued by you.
+                </p>
+
+                <a href="my-certificates.html" class="btn">
+                    View Certificates
+                </a>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <h2>Verify Certificate</h2>
+
+                <p>
+                    Verify a certificate using its ID.
+                </p>
+
+                <a href="verify.html" class="btn">
+                   Verify
+                </a>
+
+            </div>
+<div class="dashboard-card">
+
+    <h2>
+        Issuer Analytics
+    </h2>
+
+    <p>
+        View certificate issuance and
+        verification statistics.
+    </p>
+
+    <button
+        onclick="window.location.href='issuer-analytics.html'"
+    >
+        View Analytics
+    </button>
+
+</div>
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+        // Get user information
+
+        const userData = localStorage.getItem("user");
+
+
+        if (userData) {
+
+            const user = JSON.parse(userData);
+
+            document.getElementById("welcomeMessage").innerText =
+                "Welcome, " + user.name;
+
+        }
+
+
+        // Logout
+
+        document.getElementById("logoutBtn").addEventListener(
+            "click",
+            function () {
+
+                localStorage.removeItem("token");
+
+                localStorage.removeItem("user");
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

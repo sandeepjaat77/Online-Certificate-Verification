@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Create Certificate</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+</head>
+
+<body>
+
+    <!-- Navbar -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            Certificate Verification
+        </div>
+
+        <div class="nav-links">
+
+            <a href="issuer-dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="login.html" id="logoutBtn">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Certificate Form -->
+
+    <div class="form-container">
+
+        <h1>
+            Create Certificate
+        </h1>
+
+        <form id="certificateForm">
+
+            <label>
+                Recipient Name
+            </label>
+
+            <input
+                type="text"
+                id="recipientName"
+                placeholder="Enter recipient name"
+                required
+            >
+
+
+            <label>
+                Recipient Email
+            </label>
+
+            <input
+                type="email"
+                id="recipientEmail"
+                placeholder="Enter recipient email"
+                required
+            >
+
+
+            <label>
+                Course Name
+            </label>
+
+            <input
+                type="text"
+                id="courseName"
+                placeholder="Enter course name"
+                required
+            >
+
+
+            <label>
+                Expiry Date
+            </label>
+
+            <input
+                type="date"
+                id="expiryDate"
+            >
+
+
+            <button type="submit">
+                Create Certificate
+            </button>
+
+        </form>
+
+
+        <p id="message"></p>
+
+    </div>
+    <div id="qrcode"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script src="js/create-certificate.js"></script>
+
+</body>
+
+</html>
