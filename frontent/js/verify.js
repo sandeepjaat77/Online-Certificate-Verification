@@ -1,271 +1,175 @@
-const verifyForm =
-    document.getElementById("verifyForm");
+document.addEventListener("DOMContentLoaded", () => {
 
+    const verifyForm = document.getElementById("verifyForm");
+    const certificateInput = document.getElementById("certificateInput");
+    const verifyButton = document.getElementById("verifyButton");
+    const message = document.getElementById("message");
+    const certificateResult = document.getElementById("certificateResult");
 
-// CHECK CERTIFICATE ID FROM URL
+    console.log("verify.js loaded successfully");
 
-const urlParams =
-    new URLSearchParams(
-        window.location.search
-    );
+    if (!verifyForm) {
+        console.error("verifyForm not found");
+        return;
+    }
 
-const certificateIdFromURL =
-    urlParams.get("id");
-
-
-// AUTOMATIC VERIFICATION FROM QR CODE
-
-if (certificateIdFromURL) {
-
-    document.getElementById(
-        "certificateId"
-    ).value =
-        certificateIdFromURL;
-
-    verifyCertificate(
-        certificateIdFromURL
-    );
-
-}
-
-
-// FORM SUBMIT
-
-verifyForm.addEventListener(
-    "submit",
-    (event) => {
+    verifyForm.addEventListener("submit", async (event) => {
 
         event.preventDefault();
 
+        const certificateId = certificateInput.value.trim();
 
-        const certificateId =
-            document.getElementById(
-                "certificateId"
-            ).value.trim();
+        console.log("Verify clicked:", certificateId);
 
+        if (!certificateId) {
 
-        verifyCertificate(
-            certificateId
-        );
+            message.textContent = "Please enter a Certificate ID.";
+            message.style.color = "#dc3545";
 
-    }
-);
+            return;
+        }
 
+        verifyButton.disabled = true;
+        verifyButton.innerHTML = "Verifying...";
 
-// VERIFY CERTIFICATE
+        message.textContent = "";
+        certificateResult.innerHTML = "";
 
-async function verifyCertificate(
-    certificateId
-) {
+        try {
 
-    const message =
-        document.getElementById(
-            "message"
-        );
+            /*
+             * IMPORTANT:
+             * Change this URL only if your backend uses
+             * a different verification endpoint.
+             */
 
-    const certificateResult =
-        document.getElementById(
-            "certificateResult"
-        );
-
-
-    // CHECK EMPTY ID
-
-    if (!certificateId) {
-
-        message.innerText =
-            "Please enter Certificate ID";
-
-        message.style.color =
-            "red";
-
-        certificateResult.innerHTML =
-            "";
-
-        return;
-
-    }
-
-
-    try {
-
-        // RENDER BACKEND API
-
-        const response =
-            await fetch(
-                "https://online-certificate-verification-owsv.onrender.com/api/certificates/verify/" +
-                encodeURIComponent(
-                    certificateId
-                )
+            const response = await fetch(
+                `https://online-certificate-verification-backend.onrender.com/api/certificates/verify/${encodeURIComponent(certificateId)}`
             );
 
+            const data = await response.json();
 
-        const data =
-            await response.json();
+            console.log("Backend response:", data);
 
+            if (!response.ok) {
 
-        // CERTIFICATE VALID
+                throw new Error(
+                    data.message || "Certificate verification failed."
+                );
+            }
 
-        if (
-            response.ok &&
-            data.valid &&
-            data.certificate
-        ) {
-
-            message.innerText =
-                "Certificate is valid";
-
-            message.style.color =
-                "green";
-
+            message.textContent = "Certificate is valid";
+            message.style.color = "#198754";
 
             certificateResult.innerHTML = `
 
-                <div class="certificate-card">
+                <div class="certificate-result-card">
 
-                    <h2>
-                        Valid Certificate
-                    </h2>
+                    <div class="result-header">
 
-                    <p>
-                        <strong>
-                            Certificate ID:
-                        </strong>
+                        <div class="success-icon">
+                            ✓
+                        </div>
 
-                        ${data.certificate.certificateId}
+                        <div>
+                            <h2>Valid Certificate</h2>
+                            <p>
+                                This certificate has been successfully verified.
+                            </p>
+                        </div>
 
-                    </p>
+                    </div>
 
-                    <p>
-                        <strong>
-                            Recipient:
-                        </strong>
+                    <div class="certificate-details">
 
-                        ${data.certificate.recipientName}
+                        <div class="detail-row">
+                            <span>Certificate ID</span>
+                            <strong>
+                                ${data.certificateId || certificateId}
+                            </strong>
+                        </div>
 
-                    </p>
+                        <div class="detail-row">
+                            <span>Recipient</span>
+                            <strong>
+                                ${data.recipientName || data.recipient || "-"}
+                            </strong>
+                        </div>
 
-                    <p>
-                        <strong>
-                            Course:
-                        </strong>
+                        <div class="detail-row">
+                            <span>Course</span>
+                            <strong>
+                                ${data.courseName || data.course || "-"}
+                            </strong>
+                        </div>
 
-                        ${data.certificate.courseName}
+                        <div class="detail-row">
+                            <span>Email</span>
+                            <strong>
+                                ${data.recipientEmail || data.email || "-"}
+                            </strong>
+                        </div>
 
-                    </p>
+                        <div class="detail-row">
+                            <span>Issue Date</span>
+                            <strong>
+                                ${data.issueDate || "-"}
+                            </strong>
+                        </div>
 
-                    <p>
-                        <strong>
-                            Email:
-                        </strong>
+                        <div class="detail-row">
+                            <span>Expiry Date</span>
+                            <strong>
+                                ${data.expiryDate || "-"}
+                            </strong>
+                        </div>
 
-                        ${data.certificate.recipientEmail}
+                        <div class="detail-row">
+                            <span>Status</span>
+                            <strong class="valid-status">
+                                ${data.status || "VALID"}
+                            </strong>
+                        </div>
 
-                    </p>
-
-                    <p>
-                        <strong>
-                            Issue Date:
-                        </strong>
-
-                        ${
-                            data.certificate.issueDate
-                            ? new Date(
-                                data.certificate.issueDate
-                            ).toLocaleDateString()
-                            : "N/A"
-                        }
-
-                    </p>
-
-                    <p>
-                        <strong>
-                            Expiry Date:
-                        </strong>
-
-                        ${
-                            data.certificate.expiryDate
-                            ? new Date(
-                                data.certificate.expiryDate
-                            ).toLocaleDateString()
-                            : "No Expiry"
-                        }
-
-                    </p>
-
-                    <p>
-                        <strong>
-                            Status:
-                        </strong>
-
-                        ${data.certificate.status || "VALID"}
-
-                    </p>
-
-
-                    <button
-                        type="button"
-                        onclick="viewCertificate('${data.certificate.certificateId}')"
-                    >
-
-                        View Certificate
-
-                    </button>
+                    </div>
 
                 </div>
-
             `;
 
-        } else {
+        } catch (error) {
 
-            message.innerText =
-                data.message ||
-                "Certificate is not valid";
+            console.error("Verification error:", error);
 
-            message.style.color =
-                "red";
+            message.textContent =
+                error.message || "Unable to verify certificate.";
 
-            certificateResult.innerHTML =
-                "";
+            message.style.color = "#dc3545";
 
+            certificateResult.innerHTML = `
+                <div class="certificate-error">
+
+                    <div class="error-icon">
+                        !
+                    </div>
+
+                    <h2>Certificate Not Found</h2>
+
+                    <p>
+                        We could not verify this certificate.
+                        Please check the Certificate ID and try again.
+                    </p>
+
+                </div>
+            `;
+
+        } finally {
+
+            verifyButton.disabled = false;
+            verifyButton.innerHTML = `
+                <span>Verify Certificate</span>
+            `;
         }
 
+    });
 
-    } catch (error) {
-
-        console.log(error);
-
-        message.innerText =
-            "Unable to connect to server";
-
-        message.style.color =
-            "red";
-
-        certificateResult.innerHTML =
-            "";
-
-    }
-
-}
-
-
-// VIEW CERTIFICATE
-
-function viewCertificate(
-    certificateId
-) {
-
-    window.location.href =
-        "certificate.html?id=" +
-        encodeURIComponent(
-            certificateId
-        );
-
-}
-
-
-// Make function available
-// to dynamically created button
-
-window.viewCertificate =
-    viewCertificate;
+});
