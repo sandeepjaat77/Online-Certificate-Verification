@@ -4,34 +4,16 @@ const API_BASE_URL =
 
 
 const verifyForm =
-    document.getElementById(
-        "verifyForm"
-    );
-
+    document.getElementById("verifyForm");
 
 const certificateInput =
-    document.getElementById(
-        "certificateInput"
-    );
-
-
-const verifyButton =
-    document.getElementById(
-        "verifyButton"
-    );
-
+    document.getElementById("certificateInput");
 
 const message =
-    document.getElementById(
-        "message"
-    );
-
+    document.getElementById("message");
 
 const certificateResult =
-    document.getElementById(
-        "certificateResult"
-    );
-
+    document.getElementById("certificateResult");
 
 
 verifyForm.addEventListener(
@@ -123,7 +105,6 @@ verifyForm.addEventListener(
                             <strong>
                                 Certificate ID:
                             </strong>
-
                             ${certificate.certificateId}
                         </p>
 
@@ -131,7 +112,6 @@ verifyForm.addEventListener(
                             <strong>
                                 Recipient:
                             </strong>
-
                             ${certificate.recipientName}
                         </p>
 
@@ -139,7 +119,6 @@ verifyForm.addEventListener(
                             <strong>
                                 Course:
                             </strong>
-
                             ${certificate.courseName}
                         </p>
 
@@ -147,7 +126,6 @@ verifyForm.addEventListener(
                             <strong>
                                 Email:
                             </strong>
-
                             ${certificate.recipientEmail}
                         </p>
 
@@ -155,7 +133,6 @@ verifyForm.addEventListener(
                             <strong>
                                 Issue Date:
                             </strong>
-
                             ${
                                 certificate.issueDate
                                 ? new Date(
@@ -169,7 +146,6 @@ verifyForm.addEventListener(
                             <strong>
                                 Expiry Date:
                             </strong>
-
                             ${
                                 certificate.expiryDate
                                 ? new Date(
@@ -208,7 +184,6 @@ verifyForm.addEventListener(
         } catch (error) {
 
             console.error(error);
-
 
             message.innerText =
                 "Unable to connect to verification server.";
