@@ -1,6 +1,8 @@
 const API_BASE_URL =
     "https://online-certificate-verification-owsv.onrender.com";
 
+
+// Get certificate ID from URL
 const params =
     new URLSearchParams(window.location.search);
 
@@ -13,7 +15,17 @@ async function loadCertificate() {
     const message =
         document.getElementById("message");
 
+    const certificateElement =
+        document.getElementById("certificate");
 
+    const certificateIdElement =
+        document.getElementById("certificateId");
+
+    const qrCodeElement =
+        document.getElementById("qrcode");
+
+
+    // Check certificate ID
     if (!certificateId) {
 
         message.innerText =
@@ -21,6 +33,9 @@ async function loadCertificate() {
 
         message.style.color =
             "red";
+
+        certificateElement.style.display =
+            "none";
 
         return;
     }
@@ -30,7 +45,9 @@ async function loadCertificate() {
 
         const response =
             await fetch(
-                `${API_BASE_URL}/api/certificates/verify/${encodeURIComponent(certificateId)}`
+                API_BASE_URL +
+                "/api/certificates/verify/" +
+                encodeURIComponent(certificateId)
             );
 
 
@@ -39,7 +56,7 @@ async function loadCertificate() {
 
 
         console.log(
-            "Certificate response:",
+            "API Response:",
             data
         );
 
@@ -64,17 +81,18 @@ async function loadCertificate() {
             data.certificate;
 
 
-        // Certificate ID
+        // Show certificate
+        certificateElement.style.display =
+            "block";
 
-        document.getElementById(
-            "certificateId"
-        ).innerText =
+
+        // Certificate ID
+        certificateIdElement.innerText =
             certificate.certificateId ||
             certificateId;
 
 
         // Recipient
-
         document.getElementById(
             "recipientName"
         ).innerText =
@@ -83,7 +101,6 @@ async function loadCertificate() {
 
 
         // Course
-
         document.getElementById(
             "courseName"
         ).innerText =
@@ -92,7 +109,6 @@ async function loadCertificate() {
 
 
         // Issue Date
-
         document.getElementById(
             "issueDate"
         ).innerText =
@@ -104,7 +120,6 @@ async function loadCertificate() {
 
 
         // Expiry Date
-
         document.getElementById(
             "expiryDate"
         ).innerText =
@@ -116,7 +131,6 @@ async function loadCertificate() {
 
 
         // Status
-
         document.getElementById(
             "status"
         ).innerText =
@@ -129,70 +143,60 @@ async function loadCertificate() {
                 );
 
 
-        // Message
-
-        message.innerText =
-            "";
-
-        message.style.color =
-            "green";
+        // Remove loading message
+        message.innerText = "";
 
 
-        // QR CODE
+        // =========================
+        // GENERATE QR CODE
+        // =========================
 
-        const qrCodeContainer =
-            document.getElementById(
-                "qrcode"
+        qrCodeElement.innerHTML = "";
+
+
+        const verificationUrl =
+            window.location.origin +
+            "/verify.html?id=" +
+            encodeURIComponent(
+                certificate.certificateId ||
+                certificateId
             );
 
 
-        if (qrCodeContainer) {
+        if (
+            typeof QRCode ===
+            "undefined"
+        ) {
 
-            qrCodeContainer.innerHTML =
-                "";
+            qrCodeElement.innerHTML = `
+                <p style="color:red;">
+                    QR Code library not loaded.
+                </p>
+            `;
 
-
-            const verifyUrl =
-                window.location.origin +
-                "/verify.html?id=" +
-                encodeURIComponent(
-                    certificate.certificateId
-                );
-
-
-            if (
-                typeof QRCode !==
-                "undefined"
-            ) {
-
-                new QRCode(
-                    qrCodeContainer,
-                    {
-                        text:
-                            verifyUrl,
-
-                        width:
-                            150,
-
-                        height:
-                            150
-                    }
-                );
-
-            } else {
-
-                qrCodeContainer.innerText =
-                    "QR Code library not loaded";
-
-            }
-
+            return;
         }
+
+
+        new QRCode(
+            qrCodeElement,
+            {
+                text:
+                    verificationUrl,
+
+                width:
+                    150,
+
+                height:
+                    150
+            }
+        );
 
 
     } catch (error) {
 
         console.error(
-            "Certificate loading error:",
+            "Certificate error:",
             error
         );
 
@@ -202,14 +206,19 @@ async function loadCertificate() {
 
         message.style.color =
             "red";
-
     }
+}
+
+
+// PRINT
+function printCertificate() {
+
+    window.print();
 
 }
 
 
 // DOWNLOAD PDF
-
 function downloadCertificate() {
 
     const certificate =
@@ -224,10 +233,9 @@ function downloadCertificate() {
         );
 
 
-    const certificateIdText =
-        certificateIdElement
-            ? certificateIdElement.innerText
-            : "certificate";
+    const id =
+        certificateIdElement.innerText ||
+        "certificate";
 
 
     const options = {
@@ -236,43 +244,29 @@ function downloadCertificate() {
 
         filename:
             "Certificate-" +
-            certificateIdText +
+            id +
             ".pdf",
 
         image: {
-
             type: "jpeg",
-
             quality: 1
-
         },
 
         html2canvas: {
-
             scale: 2,
-
             useCORS: true,
-
             logging: false
-
         },
 
         jsPDF: {
-
             unit: "mm",
-
             format: "a4",
-
             orientation: "landscape"
-
         },
 
         pagebreak: {
-
             mode: "avoid-all"
-
         }
-
     };
 
 
@@ -280,19 +274,8 @@ function downloadCertificate() {
         .set(options)
         .from(certificate)
         .save();
-
 }
 
 
-// PRINT
-
-function printCertificate() {
-
-    window.print();
-
-}
-
-
-// START
-
+// Start
 loadCertificate();
