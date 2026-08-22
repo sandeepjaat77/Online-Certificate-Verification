@@ -1,11 +1,20 @@
 const express = require("express");
-const Certificate = require("../models/Certificate");
-const VerificationLog = require("../models/VerificationLog");
-const authMiddleware = require("../middleware/authMiddleware");
+
+const Certificate =
+    require("../models/Certificate");
+
+const VerificationLog =
+    require("../models/VerificationLog");
+
+const authMiddleware =
+    require("../middleware/authMiddleware");
 
 const router = express.Router();
 
+
+// ========================================
 // GET ISSUER ANALYTICS
+// ========================================
 
 router.get(
     "/issuer/:issuerId",
@@ -14,9 +23,11 @@ router.get(
 
         try {
 
-            // Check logged-in user is issuer
+            // Check role
 
-            if (req.user.role !== "issuer") {
+            if (
+                req.user.role !== "issuer"
+            ) {
 
                 return res.status(403).json({
 
@@ -28,8 +39,7 @@ router.get(
             }
 
 
-            // Check issuer ID belongs
-            // to logged-in user
+            // Check issuer ID
 
             if (
                 req.params.issuerId !==
@@ -46,8 +56,7 @@ router.get(
             }
 
 
-            // Count total certificates
-            // issued by this issuer
+            // Total certificates
 
             const totalCertificates =
                 await Certificate.countDocuments({
@@ -58,8 +67,7 @@ router.get(
                 });
 
 
-            // Get all certificates
-            // issued by this issuer
+            // Get certificates
 
             const certificates =
                 await Certificate.find({
@@ -72,7 +80,7 @@ router.get(
                 );
 
 
-            // Get certificate IDs
+            // Certificate IDs
 
             const certificateIds =
                 certificates.map(
@@ -81,7 +89,7 @@ router.get(
                 );
 
 
-            // Count total verification attempts
+            // Total verifications
 
             const totalVerifications =
                 await VerificationLog.countDocuments({
@@ -94,7 +102,7 @@ router.get(
                 });
 
 
-            // Count valid verifications
+            // Valid verifications
 
             const validVerifications =
                 await VerificationLog.countDocuments({
@@ -110,7 +118,7 @@ router.get(
                 });
 
 
-            // Count expired verifications
+            // Expired verifications
 
             const expiredVerifications =
                 await VerificationLog.countDocuments({
@@ -126,7 +134,7 @@ router.get(
                 });
 
 
-            // Return analytics
+            // Response
 
             res.status(200).json({
 
@@ -146,7 +154,6 @@ router.get(
                 }
 
             });
-
 
         } catch (error) {
 
