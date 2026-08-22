@@ -1,46 +1,51 @@
+const API_BASE_URL =
+    "https://online-certificate-verification-owsv.onrender.com";
+
+
 const certificatesList =
-    document.getElementById("certificatesList");
+    document.getElementById(
+        "certificatesList"
+    );
+
 
 const message =
-    document.getElementById("message");
+    document.getElementById(
+        "message"
+    );
 
 
 const userData =
-    localStorage.getItem("user");
+    localStorage.getItem(
+        "user"
+    );
 
 
-if (!userData) {
+const token =
+    localStorage.getItem(
+        "token"
+    );
 
-    alert("Please login first.");
+
+if (!userData || !token) {
+
+    alert(
+        "Please login first."
+    );
 
     window.location.href =
         "login.html";
 
 } else {
 
-    let user;
-
-    try {
-
-        user =
-            JSON.parse(userData);
-
-    } catch (error) {
-
-        console.log(error);
-
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-
-        alert("Please login again.");
-
-        window.location.href =
-            "login.html";
-
-    }
+    const user =
+        JSON.parse(
+            userData
+        );
 
 
-    if (user && user.role !== "recipient") {
+    if (
+        user.role !== "recipient"
+    ) {
 
         alert(
             "Only recipients can access this page."
@@ -56,41 +61,21 @@ if (!userData) {
 
         try {
 
-            const token =
-                localStorage.getItem("token");
-
-
-            if (!token) {
-
-                alert("Please login first.");
-
-                window.location.href =
-                    "login.html";
-
-                return;
-
-            }
-
-
             const response =
                 await fetch(
-
-                    "https://online-certificate-verification-owsv.onrender.com/api/certificates/recipient/"
-                    + encodeURIComponent(user.email),
-
+                    `${API_BASE_URL}/api/certificates/recipient/` +
+                    encodeURIComponent(
+                        user.email
+                    ),
                     {
-
-                        method: "GET",
-
                         headers: {
 
                             "Authorization":
-                                "Bearer " + token
+                                "Bearer " +
+                                token
 
                         }
-
                     }
-
                 );
 
 
@@ -104,24 +89,19 @@ if (!userData) {
                     data.message ||
                     "Failed to load certificates";
 
-                message.style.color =
-                    "red";
-
                 return;
 
             }
 
 
-            certificatesList.innerHTML = "";
-
-            message.innerText = "";
-
-
-            const certificates =
-                data.certificates || [];
+            certificatesList.innerHTML =
+                "";
 
 
-            if (certificates.length === 0) {
+            if (
+                !data.certificates ||
+                data.certificates.length === 0
+            ) {
 
                 message.innerText =
                     "No certificates found.";
@@ -131,7 +111,11 @@ if (!userData) {
             }
 
 
-            certificates.forEach(
+            message.innerText =
+                "";
+
+
+            data.certificates.forEach(
                 (certificate) => {
 
                     const card =
@@ -147,7 +131,7 @@ if (!userData) {
                     card.innerHTML = `
 
                         <h2>
-                            ${certificate.courseName || ""}
+                            ${certificate.courseName}
                         </h2>
 
                         <p>
@@ -155,7 +139,7 @@ if (!userData) {
                                 Recipient Name:
                             </strong>
 
-                            ${certificate.recipientName || ""}
+                            ${certificate.recipientName}
                         </p>
 
                         <p>
@@ -163,7 +147,7 @@ if (!userData) {
                                 Certificate ID:
                             </strong>
 
-                            ${certificate.certificateId || ""}
+                            ${certificate.certificateId}
                         </p>
 
                         <p>
@@ -200,7 +184,10 @@ if (!userData) {
                             </strong>
 
                             <span class="certificate-status">
-                                ${certificate.status || "VALID"}
+                                ${
+                                    certificate.status ||
+                                    "VALID"
+                                }
                             </span>
                         </p>
 
@@ -225,13 +212,10 @@ if (!userData) {
 
         } catch (error) {
 
-            console.log(error);
+            console.error(error);
 
             message.innerText =
                 "Unable to connect to server.";
-
-            message.style.color =
-                "red";
 
         }
 
@@ -265,15 +249,11 @@ if (!userData) {
 
         logoutBtn.addEventListener(
             "click",
-            function (event) {
-
-                event.preventDefault();
-
+            () => {
 
                 localStorage.removeItem(
                     "token"
                 );
-
 
                 localStorage.removeItem(
                     "user"
