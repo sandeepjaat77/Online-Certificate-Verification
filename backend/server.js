@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 
@@ -19,15 +21,15 @@ app.use(express.json());
 app.get("/", (req, res) => {
     res.send("Online Certificate Verification System Backend Running");
 });
-app.use(
-    "/api/analytics",
-    analyticsRoutes
-);
-app.use("/api/auth", authRoutes);
 
-app.use( "/api/certificates",certificateRoutes);
-const PORT = 5000;
+// Routes
+app.use("/api/analytics", analyticsRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/certificates", certificateRoutes);
+
+// Render provides the PORT
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
