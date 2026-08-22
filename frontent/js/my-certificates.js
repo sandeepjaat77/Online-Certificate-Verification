@@ -1,246 +1,393 @@
-const certificatesList = document.getElementById("certificatesList");
-const message = document.getElementById("message");
-const searchInput = document.getElementById("searchInput");
+const certificatesList =
+    document.getElementById("certificatesList");
 
-const userData = localStorage.getItem("user");
+const message =
+    document.getElementById("message");
+
+const searchInput =
+    document.getElementById("searchInput");
+
+
+const userData =
+    localStorage.getItem("user");
+
 
 if (!userData) {
+
     alert("Please login first.");
-    window.location.href = "login.html";
-}
 
-const user = JSON.parse(userData);
+    window.location.href =
+        "login.html";
 
-if (user.role !== "issuer") {
-    alert("Only issuers can access this page.");
-    window.location.href = "index.html";
-}
+} else {
 
-let allCertificates = [];
-
-async function getCertificates() {
+    let user;
 
     try {
 
-        const token = localStorage.getItem("token");
-
-        const response = await fetch(
-            "http://10.97.14.53:5000/api/certificates/issuer/" + user.id,
-            {
-                headers: {
-                    "Authorization": "Bearer " + token
-                }
-            }
-        );
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            message.innerText = data.message;
-            return;
-        }
-
-        allCertificates =
-            data.certificates;
-
-        displayCertificates(
-            allCertificates
-        );
+        user =
+            JSON.parse(userData);
 
     } catch (error) {
 
         console.log(error);
 
-        message.innerText =
-            "Unable to connect to server.";
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+
+        alert("Please login again.");
+
+        window.location.href =
+            "login.html";
 
     }
 
-}
 
-function displayCertificates(
-    certificates
-) {
+    if (user && user.role !== "issuer") {
 
-    certificatesList.innerHTML = "";
+        alert(
+            "Only issuers can access this page."
+        );
 
-    if (certificates.length === 0) {
-
-        message.innerText =
-            "No certificates found.";
-
-        return;
+        window.location.href =
+            "index.html";
 
     }
 
-    message.innerText = "";
 
-    certificates.forEach(
-        (certificate) => {
+    let allCertificates = [];
 
-            const card =
-                document.createElement("div");
 
-            card.className =
-                "certificate-card";
+    async function getCertificates() {
 
-            card.innerHTML = `
+        try {
 
-                <h2>
-                    ${certificate.courseName}
-                </h2>
+            const token =
+                localStorage.getItem("token");
 
-                <p>
-                    <strong>
-                        Recipient Name:
-                    </strong>
-                    ${certificate.recipientName}
-                </p>
 
-                <p>
-                    <strong>
-                        Recipient Email:
-                    </strong>
-                    ${certificate.recipientEmail}
-                </p>
+            if (!token) {
 
-                <p>
-                    <strong>
-                        Certificate ID:
-                    </strong>
-                    ${certificate.certificateId}
-                </p>
+                alert("Please login first.");
 
-                <p>
-                    <strong>
-                        Issue Date:
-                    </strong>
-                    ${
-                        new Date(
-                            certificate.issueDate
-                        ).toLocaleDateString()
+                window.location.href =
+                    "login.html";
+
+                return;
+
+            }
+
+
+            const response =
+                await fetch(
+
+                    "https://online-certificate-verification-owsv.onrender.com/api/certificates/issuer/"
+                    + encodeURIComponent(user.id),
+
+                    {
+
+                        method: "GET",
+
+                        headers: {
+
+                            "Authorization":
+                                "Bearer " + token
+
+                        }
+
                     }
-                </p>
 
-                <p>
-                    <strong>
-                        Expiry Date:
-                    </strong>
-                    ${
-                        certificate.expiryDate
-                        ? new Date(
-                            certificate.expiryDate
-                        ).toLocaleDateString()
-                        : "No Expiry"
-                    }
-                </p>
+                );
 
-                <p>
-                    <strong>
-                        Status:
-                    </strong>
 
-                    <span class="certificate-status">
-                        ${certificate.status}
-                    </span>
+            const data =
+                await response.json();
 
-                </p>
 
-                <button
-                    class="view-btn"
-                    onclick="viewCertificate('${certificate.certificateId}')"
-                >
-                    View Certificate
-                </button>
+            if (!response.ok) {
 
-            `;
+                message.innerText =
+                    data.message ||
+                    "Failed to load certificates";
 
-            certificatesList.appendChild(
-                card
+                message.style.color =
+                    "red";
+
+                return;
+
+            }
+
+
+            allCertificates =
+                data.certificates || [];
+
+
+            displayCertificates(
+                allCertificates
             );
+
+
+        } catch (error) {
+
+            console.log(error);
+
+            message.innerText =
+                "Unable to connect to server.";
+
+            message.style.color =
+                "red";
 
         }
-    );
 
-}
+    }
 
-searchInput.addEventListener(
-    "input",
-    function () {
 
-        const searchText =
-            searchInput.value
-                .toLowerCase()
-                .trim();
+    function displayCertificates(
+        certificates
+    ) {
 
-        const filteredCertificates =
-            allCertificates.filter(
-                (certificate) => {
+        certificatesList.innerHTML = "";
 
-                    return (
 
-                        certificate.certificateId
-                            .toLowerCase()
-                            .includes(searchText)
+        if (!certificates ||
+            certificates.length === 0) {
 
-                        ||
+            message.innerText =
+                "No certificates found.";
 
-                        certificate.recipientName
-                            .toLowerCase()
-                            .includes(searchText)
+            return;
 
-                        ||
+        }
 
-                        certificate.recipientEmail
-                            .toLowerCase()
-                            .includes(searchText)
 
-                        ||
+        message.innerText = "";
 
-                        certificate.courseName
-                            .toLowerCase()
-                            .includes(searchText)
 
+        certificates.forEach(
+            (certificate) => {
+
+                const card =
+                    document.createElement(
+                        "div"
                     );
 
-                }
-            );
 
-        displayCertificates(
-            filteredCertificates
+                card.className =
+                    "certificate-card";
+
+
+                card.innerHTML = `
+
+                    <h2>
+                        ${certificate.courseName || ""}
+                    </h2>
+
+                    <p>
+                        <strong>
+                            Recipient Name:
+                        </strong>
+                        ${certificate.recipientName || ""}
+                    </p>
+
+                    <p>
+                        <strong>
+                            Recipient Email:
+                        </strong>
+                        ${certificate.recipientEmail || ""}
+                    </p>
+
+                    <p>
+                        <strong>
+                            Certificate ID:
+                        </strong>
+                        ${certificate.certificateId || ""}
+                    </p>
+
+                    <p>
+                        <strong>
+                            Issue Date:
+                        </strong>
+                        ${
+                            certificate.issueDate
+                            ? new Date(
+                                certificate.issueDate
+                            ).toLocaleDateString()
+                            : "N/A"
+                        }
+                    </p>
+
+                    <p>
+                        <strong>
+                            Expiry Date:
+                        </strong>
+                        ${
+                            certificate.expiryDate
+                            ? new Date(
+                                certificate.expiryDate
+                            ).toLocaleDateString()
+                            : "No Expiry"
+                        }
+                    </p>
+
+                    <p>
+                        <strong>
+                            Status:
+                        </strong>
+
+                        <span class="certificate-status">
+                            ${certificate.status || "VALID"}
+                        </span>
+
+                    </p>
+
+                    <button
+                        class="view-btn"
+                        type="button"
+                        onclick="viewCertificate('${certificate.certificateId}')"
+                    >
+                        View Certificate
+                    </button>
+
+                `;
+
+
+                certificatesList.appendChild(
+                    card
+                );
+
+            }
         );
 
     }
-);
 
-getCertificates();
 
-function viewCertificate(
-    certificateId
-) {
-
-    window.location.href =
-        "certificate.html?id=" +
-        certificateId;
-
-}
-
-document
-    .getElementById("logoutBtn")
-    .addEventListener(
-        "click",
+    searchInput.addEventListener(
+        "input",
         function () {
 
-            localStorage.removeItem(
-                "token"
-            );
+            const searchText =
+                searchInput.value
+                    .toLowerCase()
+                    .trim();
 
-            localStorage.removeItem(
-                "user"
-            );
 
-            window.location.href =
-                "login.html";
+            const filteredCertificates =
+                allCertificates.filter(
+                    (certificate) => {
+
+                        const certificateId =
+                            String(
+                                certificate.certificateId || ""
+                            ).toLowerCase();
+
+
+                        const recipientName =
+                            String(
+                                certificate.recipientName || ""
+                            ).toLowerCase();
+
+
+                        const recipientEmail =
+                            String(
+                                certificate.recipientEmail || ""
+                            ).toLowerCase();
+
+
+                        const courseName =
+                            String(
+                                certificate.courseName || ""
+                            ).toLowerCase();
+
+
+                        return (
+
+                            certificateId.includes(
+                                searchText
+                            )
+
+                            ||
+
+                            recipientName.includes(
+                                searchText
+                            )
+
+                            ||
+
+                            recipientEmail.includes(
+                                searchText
+                            )
+
+                            ||
+
+                            courseName.includes(
+                                searchText
+                            )
+
+                        );
+
+                    }
+                );
+
+
+            displayCertificates(
+                filteredCertificates
+            );
 
         }
     );
+
+
+    function viewCertificate(
+        certificateId
+    ) {
+
+        window.location.href =
+            "certificate.html?id=" +
+            encodeURIComponent(
+                certificateId
+            );
+
+    }
+
+
+    window.viewCertificate =
+        viewCertificate;
+
+
+    const logoutBtn =
+        document.getElementById(
+            "logoutBtn"
+        );
+
+
+    if (logoutBtn) {
+
+        logoutBtn.addEventListener(
+            "click",
+            function (event) {
+
+                event.preventDefault();
+
+
+                localStorage.removeItem(
+                    "token"
+                );
+
+
+                localStorage.removeItem(
+                    "user"
+                );
+
+
+                window.location.href =
+                    "login.html";
+
+            }
+        );
+
+    }
+
+
+    getCertificates();
+
+}
