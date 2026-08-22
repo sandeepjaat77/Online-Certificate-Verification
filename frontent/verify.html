@@ -20,9 +20,7 @@
 
 </head>
 
-
 <body>
-
 
     <!-- ================= NAVBAR ================= -->
 
@@ -47,11 +45,12 @@
     </nav>
 
 
-
-    <!-- ================= VERIFICATION PAGE ================= -->
+    <!-- ================= MAIN ================= -->
 
     <main class="verify-page">
 
+
+        <!-- Header -->
 
         <section class="verify-header">
 
@@ -68,35 +67,30 @@
             </h1>
 
             <p class="verify-description">
-                Enter your certificate ID below to verify
-                the authenticity and validity of your certificate.
+                Enter your certificate ID below to instantly
+                verify the authenticity and validity of a certificate.
             </p>
 
         </section>
 
 
-
-        <!-- ================= FORM ================= -->
+        <!-- Search Box -->
 
         <section class="verify-search-card">
 
             <form id="verifyForm">
 
-
                 <label for="certificateInput">
                     Certificate ID
                 </label>
 
-
                 <div class="search-row">
-
 
                     <div class="input-wrapper">
 
                         <span class="input-icon">
                             #
                         </span>
-
 
                         <input
                             type="text"
@@ -108,32 +102,27 @@
 
                     </div>
 
-
-
                     <button
                         type="submit"
                         id="verifyButton"
                     >
-                        Verify Certificate
+                        <span>
+                            Verify Certificate
+                        </span>
                     </button>
-
 
                 </div>
 
-
                 <p class="input-help">
-                    Enter the Certificate ID exactly as shown
-                    on your certificate.
+                    Enter the Certificate ID exactly as shown on your certificate.
                 </p>
-
 
             </form>
 
         </section>
 
 
-
-        <!-- ================= MESSAGE ================= -->
+        <!-- Message -->
 
         <div
             id="message"
@@ -141,13 +130,14 @@
         ></div>
 
 
-
-        <!-- ================= RESULT ================= -->
+        <!-- Result -->
 
         <section
             id="certificateResult"
             class="certificate-result"
         >
+
+            <!-- JS will put certificate information here -->
 
         </section>
 
@@ -155,17 +145,13 @@
     </main>
 
 
-
     <!-- ================= FOOTER ================= -->
 
     <footer class="verify-footer">
 
-
         <div class="footer-content">
 
-
             <div>
-
                 <strong>
                     🎓 Digital Certificate Verification
                 </strong>
@@ -173,28 +159,18 @@
                 <p>
                     Fast, secure and reliable certificate verification.
                 </p>
-
             </div>
-
 
             <div class="footer-right">
-
                 © 2026 Certificate Verification
-
             </div>
 
-
         </div>
-
 
     </footer>
 
 
-
-    <!-- ================= JAVASCRIPT ================= -->
-
     <script src="js/verify.js"></script>
-
 
 </body>
 
