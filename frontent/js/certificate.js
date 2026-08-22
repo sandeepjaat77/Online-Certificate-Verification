@@ -1,5 +1,12 @@
+const API_BASE_URL =
+    "https://online-certificate-verification-owsv.onrender.com";
+
+
 const params =
-    new URLSearchParams(window.location.search);
+    new URLSearchParams(
+        window.location.search
+    );
+
 
 const certificateId =
     params.get("id");
@@ -9,7 +16,9 @@ async function loadCertificate() {
 
     if (!certificateId) {
 
-        alert("Certificate ID is missing");
+        alert(
+            "Certificate ID is missing"
+        );
 
         return;
 
@@ -20,8 +29,10 @@ async function loadCertificate() {
 
         const response =
             await fetch(
-                "https://online-certificate-verification-owsv.onrender.com/api/certificates/verify/"
-                + encodeURIComponent(certificateId)
+                `${API_BASE_URL}/api/certificates/verify/` +
+                encodeURIComponent(
+                    certificateId
+                )
             );
 
 
@@ -29,7 +40,10 @@ async function loadCertificate() {
             await response.json();
 
 
-        if (!response.ok || !data.certificate) {
+        if (
+            !response.ok ||
+            !data.certificate
+        ) {
 
             alert(
                 data.message ||
@@ -66,32 +80,42 @@ async function loadCertificate() {
         document.getElementById(
             "issueDate"
         ).innerText =
-            new Date(
+            certificate.issueDate
+            ? new Date(
                 certificate.issueDate
-            ).toLocaleDateString();
+            ).toLocaleDateString()
+            : "N/A";
 
 
         document.getElementById(
             "expiryDate"
         ).innerText =
             certificate.expiryDate
-                ? new Date(
-                    certificate.expiryDate
-                ).toLocaleDateString()
-                : "No Expiry";
+            ? new Date(
+                certificate.expiryDate
+            ).toLocaleDateString()
+            : "No Expiry";
 
-
-        // Status
 
         document.getElementById(
             "status"
         ).innerText =
             data.valid
-                ? "VALID"
-                : data.message;
+            ? "VALID"
+            : (
+                data.message ||
+                certificate.status ||
+                "INVALID"
+            );
 
 
-        // Generate QR Code
+        /*
+            QR CODE
+
+            Use current frontend URL.
+            No localhost.
+            No local IP.
+        */
 
         const verificationUrl =
             window.location.origin +
@@ -101,29 +125,63 @@ async function loadCertificate() {
             );
 
 
-        const qrCodeElement =
+        const qrContainer =
             document.getElementById(
                 "qrcode"
             );
 
 
-        qrCodeElement.innerHTML = "";
+        if (qrContainer) {
+
+            qrContainer.innerHTML =
+                "";
+
+            new QRCode(
+                qrContainer,
+                {
+                    text:
+                        verificationUrl,
+
+                    width: 150,
+
+                    height: 150
+                }
+            );
+
+        }
 
 
-        new QRCode(
-            qrCodeElement,
-            {
-                text: verificationUrl,
+        const certificateElement =
+            document.getElementById(
+                "certificate"
+            );
 
-                width: 150,
 
-                height: 150
-            }
-        );
+        const loadingMessage =
+            document.getElementById(
+                "message"
+            );
+
+
+        if (certificateElement) {
+
+            certificateElement.style.display =
+                "block";
+
+        }
+
+
+        if (loadingMessage) {
+
+            loadingMessage.style.display =
+                "none";
+
+        }
+
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         alert(
             "Unable to load certificate"
@@ -142,10 +200,27 @@ function downloadCertificate() {
         );
 
 
+    if (!certificate) {
+
+        alert(
+            "Certificate not available"
+        );
+
+        return;
+
+    }
+
+
     const certificateIdElement =
         document.getElementById(
             "certificateId"
         );
+
+
+    const certificateIdText =
+        certificateIdElement
+        ? certificateIdElement.innerText
+        : "Certificate";
 
 
     const options = {
@@ -154,7 +229,7 @@ function downloadCertificate() {
 
         filename:
             "Certificate-" +
-            certificateIdElement.innerText +
+            certificateIdText +
             ".pdf",
 
         image: {
@@ -181,13 +256,15 @@ function downloadCertificate() {
 
             format: "a4",
 
-            orientation: "landscape"
+            orientation:
+                "landscape"
 
         },
 
         pagebreak: {
 
-            mode: "avoid-all"
+            mode:
+                "avoid-all"
 
         }
 
@@ -195,33 +272,8 @@ function downloadCertificate() {
 
 
     html2pdf()
-
         .set(options)
-
         .from(certificate)
-
-        .toPdf()
-
-        .get("pdf")
-
-        .then(function(pdf) {
-
-            const pageWidth =
-                pdf.internal.pageSize.getWidth();
-
-
-            const pageHeight =
-                pdf.internal.pageSize.getHeight();
-
-
-            console.log(
-                "PDF Page:",
-                pageWidth,
-                pageHeight
-            );
-
-        })
-
         .save();
 
 }
