@@ -1,5 +1,21 @@
+const API_BASE_URL =
+    "https://online-certificate-verification-owsv.onrender.com";
+
+
 const certificateForm =
-    document.getElementById("certificateForm");
+    document.getElementById(
+        "certificateForm"
+    );
+
+const message =
+    document.getElementById(
+        "message"
+    );
+
+const qrCodeContainer =
+    document.getElementById(
+        "qrcode"
+    );
 
 
 certificateForm.addEventListener(
@@ -12,74 +28,47 @@ certificateForm.addEventListener(
         const recipientName =
             document.getElementById(
                 "recipientName"
-            ).value.trim();
+            )
+            .value
+            .trim();
 
 
         const recipientEmail =
             document.getElementById(
                 "recipientEmail"
-            ).value.trim();
+            )
+            .value
+            .trim();
 
 
         const courseName =
             document.getElementById(
                 "courseName"
-            ).value.trim();
+            )
+            .value
+            .trim();
 
 
         const expiryDate =
             document.getElementById(
                 "expiryDate"
-            ).value;
+            )
+            .value;
 
 
         const userData =
             localStorage.getItem("user");
 
 
-        if (!userData) {
-
-            alert("Please login first");
-
-            window.location.href =
-                "login.html";
-
-            return;
-
-        }
-
-
-        let user;
-
-        try {
-
-            user =
-                JSON.parse(userData);
-
-        } catch (error) {
-
-            console.log(error);
-
-            localStorage.removeItem("user");
-            localStorage.removeItem("token");
-
-            alert("Please login again");
-
-            window.location.href =
-                "login.html";
-
-            return;
-
-        }
-
-
         const token =
             localStorage.getItem("token");
 
 
-        if (!token) {
+        if (!userData || !token) {
 
-            alert("Please login first");
+            alert(
+                "Please login first."
+            );
 
             window.location.href =
                 "login.html";
@@ -89,12 +78,16 @@ certificateForm.addEventListener(
         }
 
 
-        // Only issuer can create certificates
+        const user =
+            JSON.parse(userData);
 
-        if (user.role !== "issuer") {
+
+        if (
+            user.role !== "issuer"
+        ) {
 
             alert(
-                "Only issuers can create certificates"
+                "Only issuers can create certificates."
             );
 
             window.location.href =
@@ -109,7 +102,7 @@ certificateForm.addEventListener(
 
             const response =
                 await fetch(
-                    "https://online-certificate-verification-owsv.onrender.com/api/certificates",
+                    `${API_BASE_URL}/api/certificates`,
                     {
                         method: "POST",
 
@@ -146,26 +139,28 @@ certificateForm.addEventListener(
 
             if (response.ok) {
 
+                const certificate =
+                    data.certificate;
+
+
                 const certificateId =
-                    data.certificate.certificateId;
-
-
-                const message =
-                    document.getElementById(
-                        "message"
-                    );
+                    certificate.certificateId;
 
 
                 message.innerText =
-                    "Certificate created successfully! Certificate ID: "
-                    + certificateId;
-
+                    "Certificate created successfully! Certificate ID: " +
+                    certificateId;
 
                 message.style.color =
                     "green";
 
 
-                // Generate QR Code
+                /*
+                    IMPORTANT:
+                    Use the current frontend domain.
+                    This works after deploying frontend
+                    without hard-coding an IP address.
+                */
 
                 const verifyUrl =
                     window.location.origin +
@@ -175,63 +170,46 @@ certificateForm.addEventListener(
                     );
 
 
-                const qrCode =
-                    document.getElementById(
-                        "qrcode"
+                if (qrCodeContainer) {
+
+                    qrCodeContainer.innerHTML =
+                        "";
+
+                    new QRCode(
+                        qrCodeContainer,
+                        {
+                            text: verifyUrl,
+
+                            width: 150,
+
+                            height: 150
+                        }
                     );
 
+                }
 
-                qrCode.innerHTML = "";
-
-
-                new QRCode(
-                    qrCode,
-                    {
-                        text: verifyUrl,
-
-                        width: 150,
-
-                        height: 150
-                    }
-                );
-
-
-                // Clear form
 
                 certificateForm.reset();
 
+
             } else {
-
-                const message =
-                    document.getElementById(
-                        "message"
-                    );
-
 
                 message.innerText =
                     data.message ||
-                    "Certificate creation failed";
-
+                    "Failed to create certificate";
 
                 message.style.color =
                     "red";
 
             }
 
+
         } catch (error) {
 
-            console.log(error);
-
-
-            const message =
-                document.getElementById(
-                    "message"
-                );
-
+            console.error(error);
 
             message.innerText =
                 "Unable to connect to server";
-
 
             message.style.color =
                 "red";
