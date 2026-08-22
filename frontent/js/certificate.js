@@ -1,12 +1,8 @@
 const API_BASE_URL =
     "https://online-certificate-verification-owsv.onrender.com";
 
-
 const params =
-    new URLSearchParams(
-        window.location.search
-    );
-
+    new URLSearchParams(window.location.search);
 
 const certificateId =
     params.get("id");
@@ -14,14 +10,19 @@ const certificateId =
 
 async function loadCertificate() {
 
+    const message =
+        document.getElementById("message");
+
+
     if (!certificateId) {
 
-        alert(
-            "Certificate ID is missing"
-        );
+        message.innerText =
+            "Certificate ID is missing";
+
+        message.style.color =
+            "red";
 
         return;
-
     }
 
 
@@ -29,10 +30,7 @@ async function loadCertificate() {
 
         const response =
             await fetch(
-                `${API_BASE_URL}/api/certificates/verify/` +
-                encodeURIComponent(
-                    certificateId
-                )
+                `${API_BASE_URL}/api/certificates/verify/${encodeURIComponent(certificateId)}`
             );
 
 
@@ -40,18 +38,25 @@ async function loadCertificate() {
             await response.json();
 
 
+        console.log(
+            "Certificate response:",
+            data
+        );
+
+
         if (
             !response.ok ||
             !data.certificate
         ) {
 
-            alert(
+            message.innerText =
                 data.message ||
-                "Certificate not found"
-            );
+                "Certificate not found";
+
+            message.style.color =
+                "red";
 
             return;
-
         }
 
 
@@ -59,138 +64,151 @@ async function loadCertificate() {
             data.certificate;
 
 
-        document.getElementById(
-            "recipientName"
-        ).innerText =
-            certificate.recipientName;
-
-
-        document.getElementById(
-            "courseName"
-        ).innerText =
-            certificate.courseName;
-
+        // Certificate ID
 
         document.getElementById(
             "certificateId"
         ).innerText =
-            certificate.certificateId;
+            certificate.certificateId ||
+            certificateId;
 
+
+        // Recipient
+
+        document.getElementById(
+            "recipientName"
+        ).innerText =
+            certificate.recipientName ||
+            "N/A";
+
+
+        // Course
+
+        document.getElementById(
+            "courseName"
+        ).innerText =
+            certificate.courseName ||
+            "N/A";
+
+
+        // Issue Date
 
         document.getElementById(
             "issueDate"
         ).innerText =
             certificate.issueDate
-            ? new Date(
-                certificate.issueDate
-            ).toLocaleDateString()
-            : "N/A";
+                ? new Date(
+                    certificate.issueDate
+                ).toLocaleDateString()
+                : "N/A";
 
+
+        // Expiry Date
 
         document.getElementById(
             "expiryDate"
         ).innerText =
             certificate.expiryDate
-            ? new Date(
-                certificate.expiryDate
-            ).toLocaleDateString()
-            : "No Expiry";
+                ? new Date(
+                    certificate.expiryDate
+                ).toLocaleDateString()
+                : "No Expiry";
 
+
+        // Status
 
         document.getElementById(
             "status"
         ).innerText =
             data.valid
-            ? "VALID"
-            : (
-                data.message ||
-                certificate.status ||
-                "INVALID"
-            );
+                ? "VALID"
+                : (
+                    data.message ||
+                    certificate.status ||
+                    "INVALID"
+                );
 
 
-        /*
-            QR CODE
+        // Message
 
-            Use current frontend URL.
-            No localhost.
-            No local IP.
-        */
+        message.innerText =
+            "";
 
-        const verificationUrl =
-            window.location.origin +
-            "/verify.html?id=" +
-            encodeURIComponent(
-                certificate.certificateId
-            );
+        message.style.color =
+            "green";
 
 
-        const qrContainer =
+        // QR CODE
+
+        const qrCodeContainer =
             document.getElementById(
                 "qrcode"
             );
 
 
-        if (qrContainer) {
+        if (qrCodeContainer) {
 
-            qrContainer.innerHTML =
+            qrCodeContainer.innerHTML =
                 "";
 
-            new QRCode(
-                qrContainer,
-                {
-                    text:
-                        verificationUrl,
 
-                    width: 150,
-
-                    height: 150
-                }
-            );
-
-        }
+            const verifyUrl =
+                window.location.origin +
+                "/verify.html?id=" +
+                encodeURIComponent(
+                    certificate.certificateId
+                );
 
 
-        const certificateElement =
-            document.getElementById(
-                "certificate"
-            );
+            if (
+                typeof QRCode !==
+                "undefined"
+            ) {
 
+                new QRCode(
+                    qrCodeContainer,
+                    {
+                        text:
+                            verifyUrl,
 
-        const loadingMessage =
-            document.getElementById(
-                "message"
-            );
+                        width:
+                            150,
 
+                        height:
+                            150
+                    }
+                );
 
-        if (certificateElement) {
+            } else {
 
-            certificateElement.style.display =
-                "block";
+                qrCodeContainer.innerText =
+                    "QR Code library not loaded";
 
-        }
-
-
-        if (loadingMessage) {
-
-            loadingMessage.style.display =
-                "none";
+            }
 
         }
 
 
     } catch (error) {
 
-        console.error(error);
-
-        alert(
-            "Unable to load certificate"
+        console.error(
+            "Certificate loading error:",
+            error
         );
+
+
+        message.innerText =
+            "Unable to connect to server";
+
+        message.style.color =
+            "red";
 
     }
 
 }
 
+
+// DOWNLOAD PDF
 
 function downloadCertificate() {
 
@@ -198,17 +216,6 @@ function downloadCertificate() {
         document.querySelector(
             ".certificate"
         );
-
-
-    if (!certificate) {
-
-        alert(
-            "Certificate not available"
-        );
-
-        return;
-
-    }
 
 
     const certificateIdElement =
@@ -219,8 +226,8 @@ function downloadCertificate() {
 
     const certificateIdText =
         certificateIdElement
-        ? certificateIdElement.innerText
-        : "Certificate";
+            ? certificateIdElement.innerText
+            : "certificate";
 
 
     const options = {
@@ -256,15 +263,13 @@ function downloadCertificate() {
 
             format: "a4",
 
-            orientation:
-                "landscape"
+            orientation: "landscape"
 
         },
 
         pagebreak: {
 
-            mode:
-                "avoid-all"
+            mode: "avoid-all"
 
         }
 
@@ -279,11 +284,15 @@ function downloadCertificate() {
 }
 
 
+// PRINT
+
 function printCertificate() {
 
     window.print();
 
 }
 
+
+// START
 
 loadCertificate();
