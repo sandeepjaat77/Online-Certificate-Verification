@@ -1,5 +1,11 @@
+const API_BASE_URL =
+    "https://online-certificate-verification-owsv.onrender.com";
+
 const loginForm =
     document.getElementById("loginForm");
+
+const message =
+    document.getElementById("message");
 
 
 loginForm.addEventListener(
@@ -10,48 +16,32 @@ loginForm.addEventListener(
 
 
         const email =
-            document.getElementById(
-                "email"
-            ).value.trim();
-
+            document.getElementById("email")
+                .value
+                .trim();
 
         const password =
-            document.getElementById(
-                "password"
-            ).value;
-
-
-        const message =
-            document.getElementById(
-                "message"
-            );
+            document.getElementById("password")
+                .value;
 
 
         try {
 
             const response =
                 await fetch(
-                    "https://online-certificate-verification-owsv.onrender.com/api/auth/login",
+                    `${API_BASE_URL}/api/auth/login`,
                     {
-
                         method: "POST",
 
                         headers: {
-
                             "Content-Type":
                                 "application/json"
-
                         },
 
-                        body:
-                            JSON.stringify({
-
-                                email: email,
-
-                                password: password
-
-                            })
-
+                        body: JSON.stringify({
+                            email,
+                            password
+                        })
                     }
                 );
 
@@ -70,29 +60,20 @@ loginForm.addEventListener(
                     "green";
 
 
-                // Save JWT token
-
                 localStorage.setItem(
                     "token",
                     data.token
                 );
 
 
-                // Save user information
-
                 localStorage.setItem(
                     "user",
-                    JSON.stringify(
-                        data.user
-                    )
+                    JSON.stringify(data.user)
                 );
 
 
-                // Redirect according to role
-
                 if (
-                    data.user.role ===
-                    "issuer"
+                    data.user.role === "issuer"
                 ) {
 
                     window.location.href =
@@ -119,12 +100,10 @@ loginForm.addEventListener(
 
         } catch (error) {
 
-            console.log(error);
-
+            console.error(error);
 
             message.innerText =
                 "Unable to connect to server";
-
 
             message.style.color =
                 "red";
