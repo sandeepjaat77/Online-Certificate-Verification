@@ -10,7 +10,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Digital Certificate</title>
+    <title>Create Certificate</title>
 
     <link
         rel="stylesheet"
@@ -21,95 +21,81 @@
 
 <body>
 
-    <div id="message">
-        Loading certificate...
-    </div>
-
-
-    <div
-        class="certificate"
-        id="certificate"
-    >
+    <div class="container">
 
         <h1>
-            Certificate of Achievement
+            Generate Certificate
         </h1>
 
 
-        <p>
-            This certificate is proudly presented to
-        </p>
+        <form id="certificateForm">
+
+            <input
+                type="text"
+                id="recipientName"
+                placeholder="Recipient Name"
+                required
+            >
 
 
-        <h2 id="recipientName">
-            Loading...
-        </h2>
+            <input
+                type="email"
+                id="recipientEmail"
+                placeholder="Recipient Email"
+                required
+            >
 
 
-        <p>
-            For successfully completing
-        </p>
+            <input
+                type="text"
+                id="courseName"
+                placeholder="Course Name"
+                required
+            >
 
 
-        <h3 id="courseName">
-            Loading...
-        </h3>
+            <label for="expiryDate">
+                Expiry Date
+            </label>
 
 
-        <p>
-            Certificate ID:
-            <strong id="certificateId"></strong>
-        </p>
+            <input
+                type="date"
+                id="expiryDate"
+            >
+
+
+            <button type="submit">
+                Generate Certificate
+            </button>
+
+        </form>
+
+
+        <p id="message"></p>
+
+
+        <div id="certificateIdResult"></div>
 
 
         <div id="qrcode"></div>
 
 
-        <p>
-            Issue Date:
-            <span id="issueDate"></span>
-        </p>
-
-
-        <p>
-            Expiry Date:
-            <span id="expiryDate"></span>
-        </p>
-
-
-        <p>
-            Status:
-            <strong id="status"></strong>
-        </p>
-
-
-        <button
-            type="button"
-            onclick="printCertificate()"
-        >
-            Print Certificate
-        </button>
-
-
-        <button
-            type="button"
-            onclick="downloadCertificate()"
-        >
-            Download PDF
-        </button>
+        <a
+            id="verifyLink"
+            href="#"
+            target="_blank"
+        ></a>
 
     </div>
 
 
     <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
-    ></script>
-
-    <script
         src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
     ></script>
 
-    <script src="js/certificate.js"></script>
+
+    <script src="js/create-certificate.js"></script>
 
 </body>
 
