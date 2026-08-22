@@ -10,7 +10,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Verify Certificate</title>
+    <title>Verify Certificate | Digital Certificate</title>
 
     <link
         rel="stylesheet"
@@ -19,15 +19,17 @@
 
 </head>
 
-<body>
+<body class="verify-body">
 
-    <nav class="navbar">
+    <!-- ================= NAVBAR ================= -->
 
-        <div class="logo">
-            Certificate Verification
+    <nav class="verify-navbar">
+
+        <div class="verify-logo">
+            🎓 Certificate Verification
         </div>
 
-        <div class="nav-links">
+        <div class="verify-nav-links">
 
             <a href="index.html">
                 Home
@@ -42,39 +44,174 @@
     </nav>
 
 
-    <div class="verify-container">
+    <!-- ================= MAIN ================= -->
 
-        <h1>
-            Verify Certificate
-        </h1>
+    <main class="verify-page">
 
-        <p>
-            Enter the Certificate ID to verify
-            the certificate.
-        </p>
+        <!-- HERO -->
+
+        <section class="verify-hero">
+
+            <div class="verify-shield">
+                ✓
+            </div>
+
+            <span class="verify-small-title">
+                SECURE &amp; INSTANT VERIFICATION
+            </span>
+
+            <h1>
+                Verify Your Certificate
+            </h1>
+
+            <p>
+                Confirm the authenticity of a digital certificate
+                quickly and securely using its unique Certificate ID.
+            </p>
+
+        </section>
 
 
-        <form id="verifyForm">
+        <!-- SEARCH CARD -->
 
-            <input
-                type="text"
-                id="certificateId"
-                placeholder="Enter Certificate ID"
-                required
-            >
+        <section class="verify-search-card">
 
-            <button type="submit">
-                Verify Certificate
-            </button>
+            <div class="verify-card-header">
 
-        </form>
+                <div class="verify-card-icon">
+                    🔎
+                </div>
+
+                <div>
+
+                    <h2>
+                        Certificate Verification
+                    </h2>
+
+                    <p>
+                        Enter the Certificate ID to check its validity.
+                    </p>
+
+                </div>
+
+            </div>
 
 
-        <div id="message"></div>
+            <form id="verifyForm">
 
-        <div id="certificateResult"></div>
+                <label for="certificateInput">
+                    Certificate ID
+                </label>
 
-    </div>
+
+                <div class="verify-input-row">
+
+                    <div class="verify-input-box">
+
+                        <span>
+                            #
+                        </span>
+
+                        <input
+                            type="text"
+                            id="certificateInput"
+                            placeholder="Example: CERT-1787433503412"
+                            autocomplete="off"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        id="verifyButton"
+                    >
+                        Verify Certificate
+                    </button>
+
+                </div>
+
+
+                <p class="verify-help">
+                    Enter the Certificate ID exactly as shown on your certificate.
+                </p>
+
+            </form>
+
+        </section>
+
+
+        <!-- MESSAGE -->
+
+        <div
+            id="message"
+            class="verify-message"
+        ></div>
+
+
+        <!-- RESULT -->
+
+        <section
+            id="certificateResult"
+            class="certificate-result"
+        ></section>
+
+
+        <!-- SECURITY NOTE -->
+
+        <div class="verify-security">
+
+            <span class="security-icon">
+                🔒
+            </span>
+
+            <div>
+
+                <strong>
+                    Secure Verification
+                </strong>
+
+                <p>
+                    Certificate information is verified directly
+                    against our secure database.
+                </p>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="verify-footer">
+
+        <div class="verify-footer-content">
+
+            <div>
+
+                <strong>
+                    🎓 Digital Certificate Verification
+                </strong>
+
+                <p>
+                    Fast, secure and reliable certificate verification.
+                </p>
+
+            </div>
+
+
+            <div class="verify-footer-copy">
+
+                © 2026 Certificate Verification
+
+            </div>
+
+        </div>
+
+    </footer>
 
 
     <script src="js/verify.js"></script>
