@@ -116,11 +116,6 @@
             font-weight: bold;
         }
 
-        .invalid-status {
-            color: #dc3545;
-            font-weight: bold;
-        }
-
         @media (max-width: 600px) {
 
             .verify-container {
@@ -186,9 +181,7 @@
         </p>
 
 
-        <form
-            id="verifyForm"
-        >
+        <form id="verifyForm">
 
             <input
                 type="text"
@@ -197,7 +190,6 @@
                 autocomplete="off"
                 required
             >
-
 
             <button
                 type="submit"
@@ -210,7 +202,6 @@
 
 
         <div id="message"></div>
-
 
         <div id="certificateResult"></div>
 
@@ -256,21 +247,84 @@
             );
 
 
-        verifyForm.addEventListener(
-            "submit",
-            async function (event) {
 
-                event.preventDefault();
+        // ==========================================
+        // VERIFY CERTIFICATE FUNCTION
+        // ==========================================
+
+        async function verifyCertificate(
+            certificateId
+        ) {
+
+            if (!certificateId) {
+
+                message.innerText =
+                    "Please enter Certificate ID.";
+
+                message.style.color =
+                    "red";
+
+                return;
+
+            }
 
 
-                const certificateId =
-                    certificateInput.value.trim();
+            message.innerText =
+                "Verifying certificate...";
+
+            message.style.color =
+                "#2563eb";
 
 
-                if (!certificateId) {
+            certificateResult.innerHTML =
+                "";
+
+
+            verifyButton.disabled =
+                true;
+
+            verifyButton.innerText =
+                "Verifying...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+
+                        API_BASE_URL +
+                        "/api/certificates/verify/" +
+                        encodeURIComponent(
+                            certificateId
+                        ),
+
+                        {
+                            method: "GET",
+
+                            headers: {
+                                "Accept":
+                                    "application/json"
+                            }
+                        }
+
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                console.log(
+                    "Verification response:",
+                    data
+                );
+
+
+                if (!response.ok) {
 
                     message.innerText =
-                        "Please enter Certificate ID.";
+                        data.message ||
+                        "Certificate not found.";
 
                     message.style.color =
                         "red";
@@ -280,198 +334,123 @@
                 }
 
 
-                message.innerText =
-                    "Verifying certificate...";
+                if (
+                    data.valid === true &&
+                    data.certificate
+                ) {
 
-                message.style.color =
-                    "#2563eb";
-
-
-                certificateResult.innerHTML =
-                    "";
-
-
-                verifyButton.disabled =
-                    true;
-
-                verifyButton.innerText =
-                    "Verifying...";
-
-
-                try {
-
-                    const response =
-                        await fetch(
-
-                            API_BASE_URL +
-                            "/api/certificates/verify/" +
-                            encodeURIComponent(
-                                certificateId
-                            ),
-
-                            {
-                                method: "GET",
-
-                                headers: {
-                                    "Accept":
-                                        "application/json"
-                                }
-
-                            }
-
-                        );
-
-
-                    const data =
-                        await response.json();
-
-
-                    console.log(
-                        "Verification response:",
-                        data
-                    );
-
-
-                    if (!response.ok) {
-
-                        message.innerText =
-                            data.message ||
-                            "Certificate not found.";
-
-                        message.style.color =
-                            "red";
-
-                        return;
-
-                    }
-
-
-                    if (
-                        data.valid === true &&
-                        data.certificate
-                    ) {
-
-                        const certificate =
-                            data.certificate;
-
-
-                        message.innerText =
-                            "✓ Certificate is valid";
-
-                        message.style.color =
-                            "green";
-
-
-                        certificateResult.innerHTML = `
-
-                            <div class="verification-card">
-
-                                <h2>
-                                    ✓ Valid Certificate
-                                </h2>
-
-                                <p>
-                                    <strong>
-                                        Certificate ID:
-                                    </strong>
-
-                                    ${certificate.certificateId || certificateId}
-                                </p>
-
-                                <p>
-                                    <strong>
-                                        Recipient:
-                                    </strong>
-
-                                    ${certificate.recipientName || "N/A"}
-                                </p>
-
-                                <p>
-                                    <strong>
-                                        Course:
-                                    </strong>
-
-                                    ${certificate.courseName || "N/A"}
-                                </p>
-
-                                <p>
-                                    <strong>
-                                        Email:
-                                    </strong>
-
-                                    ${certificate.recipientEmail || "N/A"}
-                                </p>
-
-                                <p>
-                                    <strong>
-                                        Issue Date:
-                                    </strong>
-
-                                    ${
-                                        certificate.issueDate
-                                        ? new Date(
-                                            certificate.issueDate
-                                        ).toLocaleDateString()
-                                        : "N/A"
-                                    }
-
-                                </p>
-
-                                <p>
-                                    <strong>
-                                        Expiry Date:
-                                    </strong>
-
-                                    ${
-                                        certificate.expiryDate
-                                        ? new Date(
-                                            certificate.expiryDate
-                                        ).toLocaleDateString()
-                                        : "No Expiry"
-                                    }
-
-                                </p>
-
-                                <p>
-                                    <strong>
-                                        Status:
-                                    </strong>
-
-                                    <span class="valid-status">
-                                        VALID
-                                    </span>
-                                </p>
-
-                            </div>
-
-                        `;
-
-                    }
-
-                    else {
-
-                        message.innerText =
-                            data.message ||
-                            "Certificate is not valid.";
-
-                        message.style.color =
-                            "red";
-
-                    }
-
-
-                }
-
-                catch (error) {
-
-                    console.error(
-                        "Verification error:",
-                        error
-                    );
+                    const certificate =
+                        data.certificate;
 
 
                     message.innerText =
-                        "Unable to connect to verification server.";
+                        "✓ Certificate is valid";
+
+                    message.style.color =
+                        "green";
+
+
+                    certificateResult.innerHTML = `
+
+                        <div class="verification-card">
+
+                            <h2>
+                                ✓ Valid Certificate
+                            </h2>
+
+                            <p>
+                                <strong>
+                                    Certificate ID:
+                                </strong>
+
+                                ${
+                                    certificate.certificateId ||
+                                    certificateId
+                                }
+                            </p>
+
+                            <p>
+                                <strong>
+                                    Recipient:
+                                </strong>
+
+                                ${
+                                    certificate.recipientName ||
+                                    "N/A"
+                                }
+                            </p>
+
+                            <p>
+                                <strong>
+                                    Course:
+                                </strong>
+
+                                ${
+                                    certificate.courseName ||
+                                    "N/A"
+                                }
+                            </p>
+
+                            <p>
+                                <strong>
+                                    Email:
+                                </strong>
+
+                                ${
+                                    certificate.recipientEmail ||
+                                    "N/A"
+                                }
+                            </p>
+
+                            <p>
+                                <strong>
+                                    Issue Date:
+                                </strong>
+
+                                ${
+                                    certificate.issueDate
+                                    ? new Date(
+                                        certificate.issueDate
+                                    ).toLocaleDateString()
+                                    : "N/A"
+                                }
+                            </p>
+
+                            <p>
+                                <strong>
+                                    Expiry Date:
+                                </strong>
+
+                                ${
+                                    certificate.expiryDate
+                                    ? new Date(
+                                        certificate.expiryDate
+                                    ).toLocaleDateString()
+                                    : "No Expiry"
+                                }
+                            </p>
+
+                            <p>
+                                <strong>
+                                    Status:
+                                </strong>
+
+                                <span class="valid-status">
+                                    VALID
+                                </span>
+                            </p>
+
+                        </div>
+
+                    `;
+
+                }
+
+                else {
+
+                    message.innerText =
+                        data.message ||
+                        "Certificate is not valid.";
 
                     message.style.color =
                         "red";
@@ -479,19 +458,88 @@
                 }
 
 
-                finally {
+            }
 
-                    verifyButton.disabled =
-                        false;
+            catch (error) {
 
-                    verifyButton.innerText =
-                        "Verify Certificate";
+                console.error(
+                    "Verification error:",
+                    error
+                );
 
-                }
+
+                message.innerText =
+                    "Unable to connect to verification server.";
+
+                message.style.color =
+                    "red";
 
             }
 
+
+            finally {
+
+                verifyButton.disabled =
+                    false;
+
+                verifyButton.innerText =
+                    "Verify Certificate";
+
+            }
+
+        }
+
+
+
+        // ==========================================
+        // MANUAL VERIFICATION
+        // ==========================================
+
+        verifyForm.addEventListener(
+            "submit",
+            function (event) {
+
+                event.preventDefault();
+
+
+                const certificateId =
+                    certificateInput.value.trim();
+
+
+                verifyCertificate(
+                    certificateId
+                );
+
+            }
         );
+
+
+
+        // ==========================================
+        // QR CODE AUTO VERIFICATION
+        // ==========================================
+
+        const urlParams =
+            new URLSearchParams(
+                window.location.search
+            );
+
+
+        const qrCertificateId =
+            urlParams.get("id");
+
+
+        if (qrCertificateId) {
+
+            certificateInput.value =
+                qrCertificateId;
+
+
+            verifyCertificate(
+                qrCertificateId
+            );
+
+        }
 
     </script>
 
