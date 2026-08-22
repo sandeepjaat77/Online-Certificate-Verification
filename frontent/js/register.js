@@ -1,90 +1,65 @@
+const API_BASE_URL =
+    "https://online-certificate-verification-owsv.onrender.com";
+
 const registerForm =
     document.getElementById("registerForm");
+
+const message =
+    document.getElementById("message");
 
 
 registerForm.addEventListener(
     "submit",
     async (event) => {
 
-        // Stop page refresh
-
         event.preventDefault();
 
 
-        // Get form values
-
         const name =
-            document.getElementById(
-                "name"
-            ).value.trim();
-
+            document.getElementById("name")
+                .value
+                .trim();
 
         const email =
-            document.getElementById(
-                "email"
-            ).value.trim();
-
+            document.getElementById("email")
+                .value
+                .trim();
 
         const password =
-            document.getElementById(
-                "password"
-            ).value;
-
+            document.getElementById("password")
+                .value;
 
         const role =
-            document.getElementById(
-                "role"
-            ).value;
-
-
-        const message =
-            document.getElementById(
-                "message"
-            );
+            document.getElementById("role")
+                .value;
 
 
         try {
 
-            // Send data to Render backend
-
             const response =
                 await fetch(
-                    "https://online-certificate-verification-owsv.onrender.com/api/auth/register",
+                    `${API_BASE_URL}/api/auth/register`,
                     {
-
                         method: "POST",
 
                         headers: {
-
                             "Content-Type":
                                 "application/json"
-
                         },
 
-                        body:
-                            JSON.stringify({
-
-                                name: name,
-
-                                email: email,
-
-                                password: password,
-
-                                role: role
-
-                            })
-
+                        body: JSON.stringify({
+                            name,
+                            email,
+                            password,
+                            role
+                        })
                     }
                 );
 
 
-            // Convert response to JSON
-
             const data =
                 await response.json();
 
-
-            // Check response
 
             if (response.ok) {
 
@@ -96,10 +71,7 @@ registerForm.addEventListener(
                     "green";
 
 
-                // Clear form
-
                 registerForm.reset();
-
 
             } else {
 
@@ -115,12 +87,10 @@ registerForm.addEventListener(
 
         } catch (error) {
 
-            console.log(error);
-
+            console.error(error);
 
             message.innerText =
                 "Unable to connect to server";
-
 
             message.style.color =
                 "red";
