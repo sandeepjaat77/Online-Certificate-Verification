@@ -1,12 +1,26 @@
+const API_BASE_URL =
+    "https://online-certificate-verification-owsv.onrender.com";
+
+
 const message =
-    document.getElementById("message");
+    document.getElementById(
+        "message"
+    );
 
 
 const userData =
-    localStorage.getItem("user");
+    localStorage.getItem(
+        "user"
+    );
 
 
-if (!userData) {
+const token =
+    localStorage.getItem(
+        "token"
+    );
+
+
+if (!userData || !token) {
 
     alert(
         "Please login first."
@@ -17,31 +31,15 @@ if (!userData) {
 
 } else {
 
-    let user;
-
-    try {
-
-        user =
-            JSON.parse(userData);
-
-    } catch (error) {
-
-        console.log(error);
-
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-
-        alert(
-            "Please login again."
+    const user =
+        JSON.parse(
+            userData
         );
 
-        window.location.href =
-            "login.html";
 
-    }
-
-
-    if (user && user.role !== "issuer") {
+    if (
+        user.role !== "issuer"
+    ) {
 
         alert(
             "Only issuers can access analytics."
@@ -57,36 +55,19 @@ if (!userData) {
 
         try {
 
-            const token =
-                localStorage.getItem(
-                    "token"
-                );
-
-
-            if (!token) {
-
-                alert(
-                    "Please login first."
-                );
-
-                window.location.href =
-                    "login.html";
-
-                return;
-
-            }
+            const issuerId =
+                user.id ||
+                user._id;
 
 
             const response =
                 await fetch(
-
-                    "https://online-certificate-verification-owsv.onrender.com/api/certificates/analytics/"
-                    + user.id,
-
+                    `${API_BASE_URL}/api/certificates/analytics/` +
+                    encodeURIComponent(
+                        issuerId
+                    ),
                     {
-
-                        method:
-                            "GET",
+                        method: "GET",
 
                         headers: {
 
@@ -97,7 +78,6 @@ if (!userData) {
                         }
 
                     }
-
                 );
 
 
@@ -149,7 +129,7 @@ if (!userData) {
 
         } catch (error) {
 
-            console.log(error);
+            console.error(error);
 
             message.innerText =
                 "Unable to connect to server";
@@ -184,7 +164,7 @@ if (!userData) {
 
         logoutBtn.addEventListener(
             "click",
-            function () {
+            () => {
 
                 localStorage.removeItem(
                     "token"
@@ -193,6 +173,7 @@ if (!userData) {
                 localStorage.removeItem(
                     "user"
                 );
+
 
                 window.location.href =
                     "login.html";
