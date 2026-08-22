@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,7 +11,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Create Certificate</title>
+    <title>Generate Certificate</title>
 
     <link
         rel="stylesheet"
@@ -21,71 +22,129 @@
 
 <body>
 
-    <div class="container">
+    <div class="page">
 
-        <h1>
-            Generate Certificate
-        </h1>
+        <div class="generator-card">
 
+            <div class="header">
 
-        <form id="certificateForm">
+                <div class="icon">
+                    🎓
+                </div>
 
-            <input
-                type="text"
-                id="recipientName"
-                placeholder="Recipient Name"
-                required
-            >
+                <h1>
+                    Generate Certificate
+                </h1>
 
+                <p>
+                    Create a secure digital certificate
+                    with a unique Certificate ID and QR code.
+                </p>
 
-            <input
-                type="email"
-                id="recipientEmail"
-                placeholder="Recipient Email"
-                required
-            >
+            </div>
 
 
-            <input
-                type="text"
-                id="courseName"
-                placeholder="Course Name"
-                required
-            >
+            <form id="certificateForm">
+
+                <div class="form-group">
+
+                    <label for="recipientName">
+                        Recipient Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="recipientName"
+                        placeholder="Enter recipient name"
+                        required
+                    >
+
+                </div>
 
 
-            <label for="expiryDate">
-                Expiry Date
-            </label>
+                <div class="form-group">
+
+                    <label for="recipientEmail">
+                        Recipient Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="recipientEmail"
+                        placeholder="Enter recipient email"
+                        required
+                    >
+
+                </div>
 
 
-            <input
-                type="date"
-                id="expiryDate"
-            >
+                <div class="form-group">
+
+                    <label for="courseName">
+                        Course Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="courseName"
+                        placeholder="Enter course name"
+                        required
+                    >
+
+                </div>
 
 
-            <button type="submit">
-                Generate Certificate
-            </button>
+                <div class="form-group">
 
-        </form>
+                    <label for="expiryDate">
+                        Expiry Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="expiryDate"
+                        required
+                    >
+
+                </div>
 
 
-        <p id="message"></p>
+                <button
+                    type="submit"
+                    class="generate-btn"
+                >
+                    Generate Certificate
+                </button>
+
+            </form>
 
 
-        <div id="certificateIdResult"></div>
+            <div
+                id="message"
+                class="message"
+            ></div>
 
 
-        <div id="qrcode"></div>
+            <div
+                id="certificateIdResult"
+                class="result-card"
+            ></div>
 
 
-        <a
-            id="verifyLink"
-            href="#"
-            target="_blank"
-        ></a>
+            <div
+                id="qrcode"
+                class="qr-container"
+            ></div>
+
+
+            <a
+                id="verifyLink"
+                href="#"
+                target="_blank"
+                class="verify-link"
+            ></a>
+
+        </div>
 
     </div>
 
@@ -100,3 +159,4 @@
 </body>
 
 </html>
+```
