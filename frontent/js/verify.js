@@ -1,266 +1,202 @@
-```javascript
-// ==========================================
-// CERTIFICATE VERIFICATION
-// ==========================================
+```html
+<!DOCTYPE html>
+<html lang="en">
 
-const API_URL = "https://online-certificate-verification-backend.onrender.com";
+<head>
 
-const verifyForm = document.getElementById("verifyForm");
-const certificateInput = document.getElementById("certificateInput");
-const verifyButton = document.getElementById("verifyButton");
-const message = document.getElementById("message");
-const certificateResult = document.getElementById("certificateResult");
+    <meta charset="UTF-8">
 
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-// ==========================================
-// VERIFY CERTIFICATE
-// ==========================================
+    <title>Verify Certificate | Digital Certificate</title>
 
-verifyForm.addEventListener("submit", async function (event) {
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
 
-    event.preventDefault();
-
-    const certificateId = certificateInput.value.trim();
-
-    // Clear previous result
-    message.textContent = "";
-    certificateResult.innerHTML = "";
-
-    // Check empty ID
-    if (!certificateId) {
-
-        message.textContent = "Please enter a Certificate ID.";
-        message.style.color = "#dc3545";
-
-        return;
-    }
+</head>
 
 
-    // Disable button while checking
-    verifyButton.disabled = true;
-    verifyButton.innerHTML = "Verifying...";
+<body>
 
 
-    try {
+    <!-- ================= NAVBAR ================= -->
 
-        console.log("Verifying certificate:", certificateId);
+    <nav class="navbar">
 
-        const response = await fetch(
-            `${API_URL}/api/certificates/verify/${encodeURIComponent(certificateId)}`,
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }
-        );
+        <div class="logo">
+            🎓 Certificate Verification
+        </div>
 
+        <div class="nav-links">
 
-        // Try to read server response
-        let data;
+            <a href="index.html">
+                Home
+            </a>
 
-        try {
-            data = await response.json();
-        } catch (jsonError) {
+            <a href="login.html">
+                Login
+            </a>
 
-            throw new Error(
-                "Verification server returned an invalid response."
-            );
-        }
+        </div>
+
+    </nav>
 
 
-        console.log("Verification response:", data);
+
+    <!-- ================= VERIFICATION PAGE ================= -->
+
+    <main class="verify-page">
 
 
-        // ==========================================
-        // CERTIFICATE NOT FOUND / INVALID
-        // ==========================================
+        <section class="verify-header">
 
-        if (!response.ok) {
+            <div class="verify-icon">
+                ✓
+            </div>
 
-            message.textContent =
-                data.message ||
-                data.error ||
-                "Certificate not found.";
+            <p class="verify-label">
+                SECURE VERIFICATION
+            </p>
 
-            message.style.color = "#dc3545";
+            <h1>
+                Verify Your Certificate
+            </h1>
 
-            certificateResult.innerHTML = "";
+            <p class="verify-description">
+                Enter your certificate ID below to verify
+                the authenticity and validity of your certificate.
+            </p>
 
-            return;
-        }
-
-
-        // ==========================================
-        // SUCCESS
-        // ==========================================
-
-        message.textContent = "Certificate is valid.";
-        message.style.color = "#198754";
+        </section>
 
 
-        const certificate = data.certificate || data;
+
+        <!-- ================= FORM ================= -->
+
+        <section class="verify-search-card">
+
+            <form id="verifyForm">
 
 
-        certificateResult.innerHTML = `
+                <label for="certificateInput">
+                    Certificate ID
+                </label>
 
-            <div class="verification-success">
 
-                <div class="success-icon">
-                    ✓
+                <div class="search-row">
+
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            #
+                        </span>
+
+
+                        <input
+                            type="text"
+                            id="certificateInput"
+                            placeholder="Example: CERT-1787431919810"
+                            autocomplete="off"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <button
+                        type="submit"
+                        id="verifyButton"
+                    >
+                        Verify Certificate
+                    </button>
+
+
                 </div>
 
-                <h2>Certificate Verified</h2>
 
-                <p class="success-text">
-                    This certificate has been successfully verified
-                    and is authentic.
+                <p class="input-help">
+                    Enter the Certificate ID exactly as shown
+                    on your certificate.
                 </p>
 
 
-                <div class="certificate-details">
+            </form>
 
-                    <div class="detail-row">
-                        <span>Certificate ID</span>
-                        <strong>
-                            ${certificate.certificateId || certificate.id || certificateId}
-                        </strong>
-                    </div>
+        </section>
 
 
-                    <div class="detail-row">
-                        <span>Recipient</span>
-                        <strong>
-                            ${certificate.recipientName || certificate.recipient || "N/A"}
-                        </strong>
-                    </div>
+
+        <!-- ================= MESSAGE ================= -->
+
+        <div
+            id="message"
+            class="verify-message"
+        ></div>
 
 
-                    <div class="detail-row">
-                        <span>Course</span>
-                        <strong>
-                            ${certificate.courseName || certificate.course || "N/A"}
-                        </strong>
-                    </div>
+
+        <!-- ================= RESULT ================= -->
+
+        <section
+            id="certificateResult"
+            class="certificate-result"
+        >
+
+        </section>
 
 
-                    <div class="detail-row">
-                        <span>Email</span>
-                        <strong>
-                            ${certificate.recipientEmail || certificate.email || "N/A"}
-                        </strong>
-                    </div>
+    </main>
 
 
-                    <div class="detail-row">
-                        <span>Issue Date</span>
-                        <strong>
-                            ${formatDate(certificate.issueDate)}
-                        </strong>
-                    </div>
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="verify-footer">
 
 
-                    <div class="detail-row">
-                        <span>Expiry Date</span>
-                        <strong>
-                            ${formatDate(certificate.expiryDate)}
-                        </strong>
-                    </div>
+        <div class="footer-content">
 
 
-                    <div class="detail-row">
-                        <span>Status</span>
+            <div>
 
-                        <strong class="status-valid">
-                            VALID
-                        </strong>
-                    </div>
-
-                </div>
-
-
-                <a
-                    class="view-certificate-btn"
-                    href="certificate.html?id=${encodeURIComponent(
-                        certificate.certificateId || certificate.id || certificateId
-                    )}"
-                >
-                    View Certificate
-                </a>
-
-            </div>
-
-        `;
-
-
-    } catch (error) {
-
-        console.error("Verification error:", error);
-
-
-        // ==========================================
-        // SERVER CONNECTION ERROR
-        // ==========================================
-
-        message.textContent =
-            "Unable to connect to verification server.";
-
-        message.style.color = "#dc3545";
-
-
-        certificateResult.innerHTML = `
-
-            <div class="verification-error">
-
-                <div class="error-icon">
-                    !
-                </div>
-
-                <h2>Verification Failed</h2>
+                <strong>
+                    🎓 Digital Certificate Verification
+                </strong>
 
                 <p>
-                    We could not connect to the verification server.
-                    Please try again in a few moments.
+                    Fast, secure and reliable certificate verification.
                 </p>
 
             </div>
 
-        `;
 
-    } finally {
+            <div class="footer-right">
 
-        // Enable button again
-        verifyButton.disabled = false;
-        verifyButton.innerHTML = "Verify Certificate";
+                © 2026 Certificate Verification
 
-    }
-
-});
+            </div>
 
 
-// ==========================================
-// FORMAT DATE
-// ==========================================
+        </div>
 
-function formatDate(date) {
 
-    if (!date) {
-        return "N/A";
-    }
+    </footer>
 
-    try {
 
-        return new Date(date).toLocaleDateString("en-IN", {
-            day: "numeric",
-            month: "numeric",
-            year: "numeric"
-        });
 
-    } catch (error) {
+    <!-- ================= JAVASCRIPT ================= -->
 
-        return date;
+    <script src="js/verify.js"></script>
 
-    }
 
-}
+</body>
+
+</html>
 ```
