@@ -1,202 +1,223 @@
-```html
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Verify Certificate | Digital Certificate</title>
-
-    <link
-        rel="stylesheet"
-        href="css/style.css"
-    >
-
-</head>
+```javascript
+const API_BASE_URL =
+    "https://online-certificate-verification-owsv.onrender.com";
 
 
-<body>
+const verifyForm =
+    document.getElementById(
+        "verifyForm"
+    );
 
 
-    <!-- ================= NAVBAR ================= -->
+const certificateInput =
+    document.getElementById(
+        "certificateInput"
+    );
 
-    <nav class="navbar">
 
-        <div class="logo">
-            🎓 Certificate Verification
-        </div>
+const verifyButton =
+    document.getElementById(
+        "verifyButton"
+    );
 
-        <div class="nav-links">
 
-            <a href="index.html">
-                Home
-            </a>
+const message =
+    document.getElementById(
+        "message"
+    );
 
-            <a href="login.html">
-                Login
-            </a>
 
-        </div>
-
-    </nav>
+const certificateResult =
+    document.getElementById(
+        "certificateResult"
+    );
 
 
 
-    <!-- ================= VERIFICATION PAGE ================= -->
+verifyForm.addEventListener(
+    "submit",
+    async (event) => {
 
-    <main class="verify-page">
-
-
-        <section class="verify-header">
-
-            <div class="verify-icon">
-                ✓
-            </div>
-
-            <p class="verify-label">
-                SECURE VERIFICATION
-            </p>
-
-            <h1>
-                Verify Your Certificate
-            </h1>
-
-            <p class="verify-description">
-                Enter your certificate ID below to verify
-                the authenticity and validity of your certificate.
-            </p>
-
-        </section>
+        event.preventDefault();
 
 
-
-        <!-- ================= FORM ================= -->
-
-        <section class="verify-search-card">
-
-            <form id="verifyForm">
+        const certificateId =
+            certificateInput.value.trim();
 
 
-                <label for="certificateInput">
-                    Certificate ID
-                </label>
+        if (!certificateId) {
+
+            message.innerText =
+                "Please enter Certificate ID.";
+
+            message.style.color =
+                "red";
+
+            return;
+
+        }
 
 
-                <div class="search-row">
+        message.innerText =
+            "Verifying certificate...";
+
+        message.style.color =
+            "#2563eb";
 
 
-                    <div class="input-wrapper">
-
-                        <span class="input-icon">
-                            #
-                        </span>
+        certificateResult.innerHTML =
+            "";
 
 
-                        <input
-                            type="text"
-                            id="certificateInput"
-                            placeholder="Example: CERT-1787431919810"
-                            autocomplete="off"
-                            required
-                        >
+        try {
+
+            const response =
+                await fetch(
+                    `${API_BASE_URL}/api/certificates/verify/${encodeURIComponent(certificateId)}`
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                message.innerText =
+                    data.message ||
+                    "Certificate not found.";
+
+                message.style.color =
+                    "red";
+
+                return;
+
+            }
+
+
+            if (
+                data.valid === true &&
+                data.certificate
+            ) {
+
+                const certificate =
+                    data.certificate;
+
+
+                message.innerText =
+                    "Certificate is valid";
+
+                message.style.color =
+                    "green";
+
+
+                certificateResult.innerHTML = `
+
+                    <div class="certificate-card">
+
+                        <h2>
+                            ✓ Valid Certificate
+                        </h2>
+
+                        <p>
+                            <strong>
+                                Certificate ID:
+                            </strong>
+
+                            ${certificate.certificateId}
+                        </p>
+
+                        <p>
+                            <strong>
+                                Recipient:
+                            </strong>
+
+                            ${certificate.recipientName}
+                        </p>
+
+                        <p>
+                            <strong>
+                                Course:
+                            </strong>
+
+                            ${certificate.courseName}
+                        </p>
+
+                        <p>
+                            <strong>
+                                Email:
+                            </strong>
+
+                            ${certificate.recipientEmail}
+                        </p>
+
+                        <p>
+                            <strong>
+                                Issue Date:
+                            </strong>
+
+                            ${
+                                certificate.issueDate
+                                ? new Date(
+                                    certificate.issueDate
+                                ).toLocaleDateString()
+                                : "N/A"
+                            }
+                        </p>
+
+                        <p>
+                            <strong>
+                                Expiry Date:
+                            </strong>
+
+                            ${
+                                certificate.expiryDate
+                                ? new Date(
+                                    certificate.expiryDate
+                                ).toLocaleDateString()
+                                : "No Expiry"
+                            }
+                        </p>
+
+                        <p>
+                            <strong>
+                                Status:
+                            </strong>
+
+                            <span class="certificate-status">
+                                ${certificate.status || "VALID"}
+                            </span>
+                        </p>
 
                     </div>
 
+                `;
+
+            } else {
+
+                message.innerText =
+                    data.message ||
+                    "Certificate is not valid.";
+
+                message.style.color =
+                    "red";
+
+            }
 
 
-                    <button
-                        type="submit"
-                        id="verifyButton"
-                    >
-                        Verify Certificate
-                    </button>
+        } catch (error) {
+
+            console.error(error);
 
 
-                </div>
+            message.innerText =
+                "Unable to connect to verification server.";
 
+            message.style.color =
+                "red";
 
-                <p class="input-help">
-                    Enter the Certificate ID exactly as shown
-                    on your certificate.
-                </p>
+        }
 
-
-            </form>
-
-        </section>
-
-
-
-        <!-- ================= MESSAGE ================= -->
-
-        <div
-            id="message"
-            class="verify-message"
-        ></div>
-
-
-
-        <!-- ================= RESULT ================= -->
-
-        <section
-            id="certificateResult"
-            class="certificate-result"
-        >
-
-        </section>
-
-
-    </main>
-
-
-
-    <!-- ================= FOOTER ================= -->
-
-    <footer class="verify-footer">
-
-
-        <div class="footer-content">
-
-
-            <div>
-
-                <strong>
-                    🎓 Digital Certificate Verification
-                </strong>
-
-                <p>
-                    Fast, secure and reliable certificate verification.
-                </p>
-
-            </div>
-
-
-            <div class="footer-right">
-
-                © 2026 Certificate Verification
-
-            </div>
-
-
-        </div>
-
-
-    </footer>
-
-
-
-    <!-- ================= JAVASCRIPT ================= -->
-
-    <script src="js/verify.js"></script>
-
-
-</body>
-
-</html>
+    }
+);
 ```
