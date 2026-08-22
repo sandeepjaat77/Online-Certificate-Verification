@@ -1,59 +1,78 @@
-<title>Digital Certificate</title>
+<!DOCTYPE html>
+<html lang="en">
 
-<link rel="stylesheet" href="css/style.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<div id="message">
-    Loading certificate...
-</div>
+    <title>Digital Certificate</title>
 
-<div class="certificate" id="certificate">
+    <link rel="stylesheet" href="css/style.css">
+</head>
 
-    <h1>Certificate of Achievement</h1>
+<body>
 
-<p>This certificate is proudly presented to</p>
+    <div id="message">
+        Loading certificate...
+    </div>
 
-<h2 id="recipientName">
-    Loading...
-</h2>
+    <div class="certificate" id="certificate">
 
-<p>For successfully completing</p>
+        <h1>Certificate of Achievement</h1>
 
-<h3 id="courseName">
-    Loading...
-</h3>
+        <p>This certificate is proudly presented to</p>
 
-<p>
-    Certificate ID:
-    <strong id="certificateId"></strong>
-</p>
+        <h2 id="recipientName">
+            Loading...
+        </h2>
 
-<div id="qrcode"></div>
+        <p>For successfully completing</p>
 
-<p>
-    Issue Date:
-    <span id="issueDate"></span>
-</p>
+        <h3 id="courseName">
+            Loading...
+        </h3>
 
-<p>
-    Expiry Date:
-    <span id="expiryDate"></span>
-</p>
+        <p>
+            Certificate ID:
+            <strong id="certificateId"></strong>
+        </p>
 
-<p>
-    Status:
-    <strong id="status"></strong>
-</p>
+        <div id="qrcode"></div>
 
-<button onclick="printCertificate()">
-    Print Certificate
-</button>
+        <p>
+            Issue Date:
+            <span id="issueDate"></span>
+        </p>
 
-<button onclick="downloadCertificate()">
-    Download PDF
-</button>
+        <p>
+            Expiry Date:
+            <span id="expiryDate"></span>
+        </p>
 
-</div>
+        <p>
+            Status:
+            <strong id="status"></strong>
+        </p>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="js/certificate.js"></script>
+        <button type="button" onclick="printCertificate()">
+            Print Certificate
+        </button>
+
+        <button type="button" onclick="downloadCertificate()">
+            Download PDF
+        </button>
+
+    </div>
+
+    <!-- PDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <!-- Certificate JavaScript -->
+    <script src="js/certificate.js"></script>
+
+</body>
+
+</html>
