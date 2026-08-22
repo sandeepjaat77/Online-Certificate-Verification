@@ -89,11 +89,11 @@ async function verifyCertificate(
 
     try {
 
-        // BACKEND API
+        // RENDER BACKEND API
 
         const response =
             await fetch(
-                "http://localhost:5000/api/certificates/verify/" +
+                "https://online-certificate-verification-owsv.onrender.com/api/certificates/verify/" +
                 encodeURIComponent(
                     certificateId
                 )
@@ -168,9 +168,13 @@ async function verifyCertificate(
                             Issue Date:
                         </strong>
 
-                        ${new Date(
+                        ${
                             data.certificate.issueDate
-                        ).toLocaleDateString()}
+                            ? new Date(
+                                data.certificate.issueDate
+                            ).toLocaleDateString()
+                            : "N/A"
+                        }
 
                     </p>
 
@@ -179,7 +183,8 @@ async function verifyCertificate(
                             Expiry Date:
                         </strong>
 
-                        ${data.certificate.expiryDate
+                        ${
+                            data.certificate.expiryDate
                             ? new Date(
                                 data.certificate.expiryDate
                             ).toLocaleDateString()
@@ -193,12 +198,13 @@ async function verifyCertificate(
                             Status:
                         </strong>
 
-                        ${data.certificate.status}
+                        ${data.certificate.status || "VALID"}
 
                     </p>
 
 
                     <button
+                        type="button"
                         onclick="viewCertificate('${data.certificate.certificateId}')"
                     >
 
@@ -256,3 +262,10 @@ function viewCertificate(
         );
 
 }
+
+
+// Make function available
+// to dynamically created button
+
+window.viewCertificate =
+    viewCertificate;
