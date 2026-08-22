@@ -7,7 +7,7 @@ const verifyForm =
     document.getElementById("verifyForm");
 
 const certificateInput =
-    document.getElementById("certificateInput");
+    document.getElementById("certificateId");
 
 const message =
     document.getElementById("message");
@@ -18,7 +18,7 @@ const certificateResult =
 
 verifyForm.addEventListener(
     "submit",
-    async (event) => {
+    async function (event) {
 
         event.preventDefault();
 
@@ -36,7 +36,6 @@ verifyForm.addEventListener(
                 "red";
 
             return;
-
         }
 
 
@@ -73,7 +72,6 @@ verifyForm.addEventListener(
                     "red";
 
                 return;
-
             }
 
 
@@ -87,7 +85,7 @@ verifyForm.addEventListener(
 
 
                 message.innerText =
-                    "Certificate is valid";
+                    "✓ Certificate is valid";
 
                 message.style.color =
                     "green";
@@ -105,6 +103,7 @@ verifyForm.addEventListener(
                             <strong>
                                 Certificate ID:
                             </strong>
+
                             ${certificate.certificateId}
                         </p>
 
@@ -112,6 +111,7 @@ verifyForm.addEventListener(
                             <strong>
                                 Recipient:
                             </strong>
+
                             ${certificate.recipientName}
                         </p>
 
@@ -119,6 +119,7 @@ verifyForm.addEventListener(
                             <strong>
                                 Course:
                             </strong>
+
                             ${certificate.courseName}
                         </p>
 
@@ -126,6 +127,7 @@ verifyForm.addEventListener(
                             <strong>
                                 Email:
                             </strong>
+
                             ${certificate.recipientEmail}
                         </p>
 
@@ -133,6 +135,7 @@ verifyForm.addEventListener(
                             <strong>
                                 Issue Date:
                             </strong>
+
                             ${
                                 certificate.issueDate
                                 ? new Date(
@@ -146,6 +149,7 @@ verifyForm.addEventListener(
                             <strong>
                                 Expiry Date:
                             </strong>
+
                             ${
                                 certificate.expiryDate
                                 ? new Date(
@@ -161,7 +165,7 @@ verifyForm.addEventListener(
                             </strong>
 
                             <span class="certificate-status">
-                                ${certificate.status || "VALID"}
+                                VALID
                             </span>
                         </p>
 
@@ -183,7 +187,11 @@ verifyForm.addEventListener(
 
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                "Verification error:",
+                error
+            );
+
 
             message.innerText =
                 "Unable to connect to verification server.";
