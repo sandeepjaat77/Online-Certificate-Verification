@@ -1,6 +1,6 @@
-
 const message =
     document.getElementById("message");
+
 
 const userData =
     localStorage.getItem("user");
@@ -15,151 +15,194 @@ if (!userData) {
     window.location.href =
         "login.html";
 
-}
+} else {
 
-
-const user =
-    JSON.parse(userData);
-
-if (
-    user.role !== "issuer"
-) {
-
-    alert(
-        "Only issuers can access analytics."
-    );
-
-    window.location.href =
-        "index.html";
-
-}
-
-async function getAnalytics() {
+    let user;
 
     try {
 
-        // Get JWT token
-
-        const token =
-            localStorage.getItem(
-                "token"
-            );
-
-
-        // Call analytics API
-
-        const response =
-            await fetch(
-
-                "http://localhost:5000/api/certificates/analytics/" +
-                user.id,
-
-                {
-
-                    method:
-                        "GET",
-
-                    headers: {
-
-                        "Authorization":
-                            "Bearer " +
-                            token
-
-                    }
-
-                }
-
-            );
-
-
-        // Convert response to JSON
-
-        const data =
-            await response.json();
-
-
-        if (!response.ok) {
-
-            message.innerText =
-                data.message ||
-                "Failed to load analytics";
-
-            message.style.color =
-                "red";
-
-            return;
-
-        }
-
-        document.getElementById(
-            "totalCertificates"
-        ).innerText =
-            data.totalCertificates;
-
-
-        document.getElementById(
-            "totalVerifications"
-        ).innerText =
-            data.totalVerifications;
-
-        document.getElementById(
-            "validVerifications"
-        ).innerText =
-            data.validVerifications;
-
-
-        document.getElementById(
-            "expiredVerifications"
-        ).innerText =
-            data.expiredVerifications;
-
-
-        message.innerText =
-            "";
-
+        user =
+            JSON.parse(userData);
 
     } catch (error) {
 
         console.log(error);
 
-        message.innerText =
-            "Unable to connect to server";
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
 
-        message.style.color =
-            "red";
+        alert(
+            "Please login again."
+        );
+
+        window.location.href =
+            "login.html";
 
     }
 
-}
 
-function goBack() {
+    if (user && user.role !== "issuer") {
 
-    window.location.href =
-        "issuer-dashboard.html";
+        alert(
+            "Only issuers can access analytics."
+        );
 
-}
+        window.location.href =
+            "index.html";
 
-document
-    .getElementById(
-        "logoutBtn"
-    )
-    .addEventListener(
-        "click",
-        function () {
+    }
 
-            localStorage.removeItem(
-                "token"
-            );
 
-            localStorage.removeItem(
-                "user"
-            );
+    async function getAnalytics() {
 
-            window.location.href =
-                "login.html";
+        try {
+
+            const token =
+                localStorage.getItem(
+                    "token"
+                );
+
+
+            if (!token) {
+
+                alert(
+                    "Please login first."
+                );
+
+                window.location.href =
+                    "login.html";
+
+                return;
+
+            }
+
+
+            const response =
+                await fetch(
+
+                    "https://online-certificate-verification-owsv.onrender.com/api/certificates/analytics/"
+                    + user.id,
+
+                    {
+
+                        method:
+                            "GET",
+
+                        headers: {
+
+                            "Authorization":
+                                "Bearer " +
+                                token
+
+                        }
+
+                    }
+
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                message.innerText =
+                    data.message ||
+                    "Failed to load analytics";
+
+                message.style.color =
+                    "red";
+
+                return;
+
+            }
+
+
+            document.getElementById(
+                "totalCertificates"
+            ).innerText =
+                data.totalCertificates || 0;
+
+
+            document.getElementById(
+                "totalVerifications"
+            ).innerText =
+                data.totalVerifications || 0;
+
+
+            document.getElementById(
+                "validVerifications"
+            ).innerText =
+                data.validVerifications || 0;
+
+
+            document.getElementById(
+                "expiredVerifications"
+            ).innerText =
+                data.expiredVerifications || 0;
+
+
+            message.innerText =
+                "";
+
+
+        } catch (error) {
+
+            console.log(error);
+
+            message.innerText =
+                "Unable to connect to server";
+
+            message.style.color =
+                "red";
 
         }
-    );
+
+    }
 
 
-getAnalytics();
+    function goBack() {
+
+        window.location.href =
+            "issuer-dashboard.html";
+
+    }
+
+
+    window.goBack =
+        goBack;
+
+
+    const logoutBtn =
+        document.getElementById(
+            "logoutBtn"
+        );
+
+
+    if (logoutBtn) {
+
+        logoutBtn.addEventListener(
+            "click",
+            function () {
+
+                localStorage.removeItem(
+                    "token"
+                );
+
+                localStorage.removeItem(
+                    "user"
+                );
+
+                window.location.href =
+                    "login.html";
+
+            }
+        );
+
+    }
+
+
+    getAnalytics();
+
+}
