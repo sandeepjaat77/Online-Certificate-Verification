@@ -1,776 +1,159 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* =========================================================
+   PROFESSIONAL VERIFY CERTIFICATE PAGE
+   Paste this at the VERY END of style.css
+========================================================= */
 
+/* Page background */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f7fb;
-    color: #222;
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(37, 99, 235, 0.12),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 90%,
+            rgba(79, 70, 229, 0.10),
+            transparent 30%
+        ),
+        #f8fafc;
+    color: #0f172a;
 }
 
 
-/* Navbar */
+/* =========================================================
+   NAVBAR
+========================================================= */
 
 .navbar {
-    background-color: #0d6efd;
-    color: white;
-
-    padding: 18px 50px;
-
+    min-height: 72px;
+    padding: 0 6%;
+    background: rgba(15, 23, 42, 0.97);
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 4px 20px rgba(15,23,42,0.12);
 }
 
 .logo {
     font-size: 22px;
-    font-weight: bold;
+    font-weight: 800;
+    letter-spacing: -0.3px;
 }
 
 .nav-links {
     display: flex;
-    gap: 25px;
+    align-items: center;
+    gap: 10px;
 }
 
 .nav-links a {
-    color: white;
+    color: #e2e8f0;
     text-decoration: none;
-    font-size: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10px 16px;
+    border-radius: 9px;
+    transition: all 0.2s ease;
 }
 
 .nav-links a:hover {
-    text-decoration: underline;
-}
-
-
-/* Hero */
-
-.hero {
-    min-height: 500px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    text-align: center;
-
-    padding: 50px 20px;
-
-    background-color: #eaf2ff;
-}
-
-.hero-content {
-    max-width: 800px;
-}
-
-.hero h1 {
-    font-size: 48px;
-    margin-bottom: 20px;
-}
-
-.hero p {
-    font-size: 20px;
-    margin-bottom: 30px;
-    color: #555;
-}
-
-
-/* Buttons */
-
-.hero-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
-
-.btn {
-    display: inline-block;
-
-    padding: 12px 25px;
-
-    background-color: #0d6efd;
+    background: rgba(255,255,255,0.10);
     color: white;
-
     text-decoration: none;
-
-    border-radius: 5px;
-
-    font-weight: bold;
-}
-
-.btn:hover {
-    background-color: #0b5ed7;
-}
-
-.btn-outline {
-    background-color: transparent;
-    color: #0d6efd;
-    border: 2px solid #0d6efd;
-}
-
-
-/* Features */
-
-.features {
-    padding: 60px 30px;
-    text-align: center;
-}
-
-.features h2 {
-    font-size: 32px;
-    margin-bottom: 40px;
-}
-
-.feature-container {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-
-    flex-wrap: wrap;
-}
-
-.feature-card {
-    width: 280px;
-
-    background-color: white;
-
-    padding: 30px;
-
-    border-radius: 10px;
-
-    box-shadow:
-        0 5px 15px
-        rgba(0, 0, 0, 0.1);
-}
-
-.feature-card h3 {
-    margin-bottom: 15px;
-    color: #0d6efd;
-}
-
-.feature-card p {
-    color: #555;
-    line-height: 1.6;
-}
-
-
-/* Footer */
-
-footer {
-    background-color: #222;
-    color: white;
-
-    text-align: center;
-
-    padding: 20px;
-
-    margin-top: 30px;
-}
-
-
-/* Responsive */
-
-@media (max-width: 768px) {
-
-    .navbar {
-        padding: 15px 20px;
-
-        flex-direction: column;
-
-        gap: 15px;
-    }
-
-    .hero h1 {
-        font-size: 35px;
-    }
-
-    .hero-buttons {
-        flex-direction: column;
-    }
-
-    .btn {
-        width: 100%;
-    }
-
-}
-/* Register Form */
-
-.form-container {
-    width: 400px;
-    max-width: 90%;
-
-    margin: 60px auto;
-
-    padding: 30px;
-
-    background-color: white;
-
-    border-radius: 10px;
-
-    box-shadow:
-        0 5px 20px
-        rgba(0, 0, 0, 0.1);
-}
-
-.form-container h1 {
-    text-align: center;
-
-    margin-bottom: 25px;
-}
-
-.form-container label {
-    display: block;
-
-    margin-top: 15px;
-
-    margin-bottom: 5px;
-
-    font-weight: bold;
-}
-
-.form-container input,
-.form-container select {
-    width: 100%;
-
-    padding: 12px;
-
-    border: 1px solid #ccc;
-
-    border-radius: 5px;
-
-    font-size: 15px;
-}
-
-.form-container button {
-    width: 100%;
-
-    padding: 12px;
-
-    margin-top: 25px;
-
-    background-color: #0d6efd;
-
-    color: white;
-
-    border: none;
-
-    border-radius: 5px;
-
-    font-size: 16px;
-
-    cursor: pointer;
-}
-
-.form-container button:hover {
-    background-color: #0b5ed7;
-}
-
-#message {
-    text-align: center;
-
-    margin-top: 15px;
-
-    font-weight: bold;
-}
-
-.account-text {
-    text-align: center;
-
-    margin-top: 20px;
-}
-
-.account-text a {
-    color: #0d6efd;
-
-    text-decoration: none;
-
-    font-weight: bold;
-}
-
-/* Dashboard */
-
-.dashboard-container {
-    padding: 50px;
-    max-width: 1200px;
-    margin: auto;
-}
-
-.dashboard-container h1 {
-    font-size: 35px;
-    margin-bottom: 10px;
-}
-
-#welcomeMessage {
-    color: #555;
-    font-size: 18px;
-    margin-bottom: 40px;
-}
-
-.dashboard-cards {
-    display: flex;
-    gap: 25px;
-    flex-wrap: wrap;
-}
-
-.dashboard-card {
-    background-color: white;
-
-    width: 300px;
-
-    padding: 30px;
-
-    border-radius: 10px;
-
-    box-shadow:
-        0 5px 15px
-        rgba(0, 0, 0, 0.1);
-}
-
-.dashboard-card h2 {
-    color: #0d6efd;
-    margin-bottom: 15px;
-}
-
-.dashboard-card p {
-    color: #555;
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
-
-@media (max-width: 768px) {
-
-    .dashboard-container {
-        padding: 30px 20px;
-    }
-
-    .dashboard-card {
-        width: 100%;
-    }
-
-}
-
-/* My Certificates */
-
-.certificates-container {
-
-    width: 90%;
-
-    max-width: 1100px;
-
-    margin: 50px auto;
-
-}
-
-
-.certificates-container h1 {
-
-    text-align: center;
-
-    color: #0d6efd;
-
-    margin-bottom: 30px;
-
-}
-
-
-#message {
-
-    text-align: center;
-
-    margin: 20px;
-
-}
-
-
-#certificatesList {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(280px, 1fr)
-        );
-
-    gap: 25px;
-
-}
-
-
-.certificate-card {
-
-    background-color: white;
-
-    padding: 25px;
-
-    border-radius: 10px;
-
-    box-shadow:
-        0 5px 15px
-        rgba(0, 0, 0, 0.1);
-
-    border-left:
-        5px solid #0d6efd;
-
-}
-
-
-.certificate-card h2 {
-
-    color: #0d6efd;
-
-    margin-bottom: 20px;
-
-}
-
-
-.certificate-card p {
-
-    margin: 10px 0;
-
-}
-
-
-.certificate-status {
-
-    font-weight: bold;
-
-    color: #198754;
-
-}
-
-.certificates-container {
-    width: 90%;
-    max-width: 1100px;
-    margin: 50px auto;
-}
-
-.certificates-container h1 {
-    text-align: center;
-    color: #0d6efd;
-    margin-bottom: 30px;
-}
-
-#message {
-    text-align: center;
-    margin: 20px;
-}
-
-#certificatesList {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
-}
-
-.certificate-card {
-    background-color: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    border-left: 5px solid #0d6efd;
-}
-
-.certificate-card h2 {
-    color: #0d6efd;
-    margin-bottom: 20px;
-}
-
-.certificate-card p {
-    margin: 10px 0;
-}
-
-.certificate-status {
-    font-weight: bold;
-    color: #198754;
-}
-
-.certificates-container {
-    width: 90%;
-    max-width: 1100px;
-    margin: 50px auto;
-}
-
-.certificates-container h1 {
-    text-align: center;
-    color: #0d6efd;
-    margin-bottom: 30px;
-}
-
-#message {
-    text-align: center;
-    margin: 20px;
-}
-
-#certificatesList {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
-}
-
-.certificate-card {
-    background-color: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    border-left: 5px solid #0d6efd;
-}
-
-.certificate-card h2 {
-    color: #0d6efd;
-    margin-bottom: 20px;
-}
-
-.certificate-card p {
-    margin: 10px 0;
-}
-
-.certificate-status {
-    font-weight: bold;
-    color: #198754;
-}
-
-.certificate {
-    width: 80%;
-    max-width: 900px;
-    margin: 50px auto;
-    padding: 60px;
-    text-align: center;
-    border: 10px solid #0d6efd;
-    background: white;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-}
-
-.certificate h1 {
-    color: #0d6efd;
-    font-size: 40px;
-}
-
-.certificate h2 {
-    font-size: 35px;
-    margin: 30px 0;
-}
-
-.certificate h3 {
-    font-size: 25px;
 }
 
-.certificate button {
-    margin-top: 30px;
-    padding: 12px 25px;
-    background: #0d6efd;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-@media print {
-
-    .certificate button {
-        display: none;
-    }
-
-    .certificate {
-        box-shadow: none;
-    }
-
-}
-
-#searchInput {
-    width: 100%;
-    max-width: 600px;
-    padding: 12px;
-    margin: 20px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-#searchInput:focus {
-    outline: none;
-    border-color: #1f3c88;
-}
-/* ========================================
-   DASHBOARD CARDS
-======================================== */
-
-.dashboard-card {
-    background-color: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.10);
-    transition: 0.3s;
-}
-
-.dashboard-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
 
-/* CARD HEADING */
+/* =========================================================
+   VERIFY PAGE MAIN AREA
+========================================================= */
 
-.dashboard-card h2 {
-    color: #0d6efd;
-    font-size: 28px;
-    margin-bottom: 20px;
-}
-
-
-/* CARD DESCRIPTION */
-
-.dashboard-card p {
-    color: #444;
-    font-size: 18px;
-    line-height: 1.6;
-    margin-bottom: 25px;
-}
-
-
-/* BUTTON */
-
-.dashboard-card button {
-    background-color: #0d6efd;
-    color: white;
-    border: none;
-    padding: 15px 25px;
-    border-radius: 6px;
-    font-size: 17px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.dashboard-card button:hover {
-    background-color: #0958c7;
-}
-
-
-/* ================================
-   GLOBAL
-================================ */
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+/*
+   This styles the main content even if your verify.html
+   does not have a special wrapper.
+*/
 
-body {
-    font-family: Arial, Helvetica, sans-serif;
+body:has(#certificateInput) {
     min-height: 100vh;
-
-    background:
-        radial-gradient(
-            circle at top left,
-            #dbeafe 0%,
-            transparent 35%
-        ),
-        radial-gradient(
-            circle at bottom right,
-            #e0e7ff 0%,
-            transparent 35%
-        ),
-        #f8fafc;
-
-    color: #1e293b;
 }
 
 
-/* ================================
-   MAIN CONTAINER
-================================ */
+/* Verify heading */
+body:has(#certificateInput) h1 {
+    color: #0f172a;
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    text-align: center;
+    margin-top: 55px;
+    margin-bottom: 12px;
+}
 
-.container {
-    width: min(900px, 92%);
-    margin: 60px auto;
 
-    background: rgba(255, 255, 255, 0.95);
+/* Verify description */
+body:has(#certificateInput) h1 + p {
+    text-align: center;
+    color: #64748b;
+    font-size: 17px;
+    margin-bottom: 28px;
+}
 
-    padding: 45px;
 
-    border-radius: 22px;
+/* =========================================================
+   VERIFY SEARCH FORM
+========================================================= */
 
-    box-shadow:
-        0 20px 50px rgba(15, 23, 42, 0.12);
+body:has(#certificateInput) form {
+    width: min(720px, 92%);
+    margin: 0 auto;
+    display: flex;
+    gap: 12px;
+    padding: 10px;
+
+    background: white;
 
     border: 1px solid #e2e8f0;
+    border-radius: 16px;
 
-    text-align: center;
+    box-shadow:
+        0 10px 35px rgba(15, 23, 42, 0.08);
 }
 
 
-/* ================================
-   HEADING
-================================ */
+/* Certificate ID input */
+#certificateInput {
+    flex: 1;
 
-.container h1 {
-    font-size: 38px;
-    margin-bottom: 12px;
+    min-width: 0;
 
-    color: #2563eb;
+    height: 52px;
 
-    font-weight: 800;
-}
-
-.container h1::after {
-    content: "";
-
-    display: block;
-
-    width: 70px;
-    height: 4px;
-
-    background: #2563eb;
-
-    border-radius: 10px;
-
-    margin: 15px auto 35px;
-}
-
-
-/* ================================
-   FORM
-================================ */
-
-#certificateForm {
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, 1fr);
-
-    gap: 18px;
-
-    text-align: left;
-}
-
-
-/* ================================
-   INPUTS
-================================ */
-
-#certificateForm input {
-    width: 100%;
-
-    padding: 15px 16px;
+    padding: 0 17px;
 
     border: 1px solid #cbd5e1;
 
-    border-radius: 10px;
+    border-radius: 11px;
 
-    font-size: 15px;
+    background: #f8fafc;
 
-    background: #ffffff;
+    color: #0f172a;
 
-    color: #1e293b;
+    font-size: 16px;
 
     outline: none;
 
-    transition: 0.2s ease;
+    transition: all 0.2s ease;
 }
 
-#certificateForm input:focus {
+#certificateInput::placeholder {
+    color: #94a3b8;
+}
+
+#certificateInput:focus {
+    background: white;
+
     border-color: #2563eb;
 
     box-shadow:
@@ -778,35 +161,15 @@ body {
 }
 
 
-/* ================================
-   EXPIRY LABEL
-================================ */
+/* Verify button */
+body:has(#certificateInput) form button {
+    height: 52px;
 
-#certificateForm label {
-    grid-column: span 2;
-
-    font-size: 14px;
-
-    font-weight: 600;
-
-    color: #475569;
-
-    margin-bottom: -12px;
-}
-
-
-/* ================================
-   BUTTON
-================================ */
-
-#certificateForm button {
-    grid-column: span 2;
-
-    padding: 16px;
+    padding: 0 25px;
 
     border: none;
 
-    border-radius: 10px;
+    border-radius: 11px;
 
     background:
         linear-gradient(
@@ -817,215 +180,226 @@ body {
 
     color: white;
 
-    font-size: 16px;
+    font-size: 15px;
 
     font-weight: 700;
 
     cursor: pointer;
 
-    transition: 0.2s ease;
+    white-space: nowrap;
 
     box-shadow:
-        0 8px 20px rgba(37, 99, 235, 0.25);
+        0 8px 18px rgba(37, 99, 235, 0.22);
+
+    transition: all 0.2s ease;
 }
 
-#certificateForm button:hover {
+body:has(#certificateInput) form button:hover {
     transform: translateY(-2px);
 
     box-shadow:
-        0 12px 25px rgba(37, 99, 235, 0.3);
+        0 12px 25px rgba(37, 99, 235, 0.30);
 }
 
-#certificateForm button:active {
+body:has(#certificateInput) form button:active {
     transform: translateY(0);
 }
 
 
-/* ================================
-   MESSAGE
-================================ */
+/* =========================================================
+   VERIFY MESSAGE
+========================================================= */
 
-#message {
-    margin-top: 25px;
+body:has(#certificateInput) #message {
+    width: min(900px, 92%);
 
-    font-size: 17px;
+    margin: 28px auto 18px;
+
+    padding: 14px 20px;
+
+    border-radius: 12px;
+
+    font-size: 16px;
 
     font-weight: 700;
+
+    text-align: center;
 }
 
 
-/* ================================
-   CERTIFICATE RESULT
-================================ */
+/* =========================================================
+   VALID CERTIFICATE CARD
+========================================================= */
 
-#certificateIdResult {
-    margin-top: 30px;
+/*
+   Your screenshot shows the result as a large white card.
+   This makes it look like a professional verification result.
+*/
 
-    padding: 30px;
+body:has(#certificateInput) .certificate-card {
+    width: min(900px, 92%);
 
-    background: #f8fafc;
+    margin: 20px auto 70px;
+
+    padding: 38px;
+
+    background: rgba(255,255,255,0.98);
 
     border: 1px solid #e2e8f0;
 
-    border-radius: 16px;
+    border-radius: 20px;
+
+    box-shadow:
+        0 20px 50px rgba(15, 23, 42, 0.10);
+
+    position: relative;
+
+    overflow: hidden;
 }
 
 
-/* Generated heading */
+/* Blue accent line */
+body:has(#certificateInput) .certificate-card::before {
+    content: "";
 
-#certificateIdResult h2 {
-    color: #16a34a;
+    position: absolute;
 
-    font-size: 26px;
+    top: 0;
+    left: 0;
+    right: 0;
 
-    margin-bottom: 18px;
+    height: 5px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #2563eb,
+            #4f46e5
+        );
 }
 
 
-/* Certificate ID */
+/* Result heading */
+body:has(#certificateInput) .certificate-card h2 {
+    margin: 0 0 28px;
 
-#certificateIdResult strong {
     color: #2563eb;
+
+    font-size: 30px;
+
+    font-weight: 800;
+
+    letter-spacing: -0.5px;
 }
 
 
-/* ================================
-   QR CODE
-================================ */
-
-#qrcode {
-    margin: 25px auto;
-
+/* Certificate information */
+body:has(#certificateInput) .certificate-card p {
     display: flex;
-
-    justify-content: center;
 
     align-items: center;
 
-    width: fit-content;
+    justify-content: space-between;
 
-    padding: 16px;
+    gap: 30px;
 
-    background: white;
+    padding: 16px 0;
 
-    border-radius: 14px;
+    margin: 0;
 
-    border: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
 
-    box-shadow:
-        0 8px 25px rgba(15, 23, 42, 0.08);
+    color: #475569;
+
+    font-size: 16px;
 }
 
 
-/* ================================
-   VERIFY LINK
-================================ */
+/* Last information row */
+body:has(#certificateInput) .certificate-card p:last-of-type {
+    border-bottom: none;
+}
 
-#verifyLink {
-    display: inline-block;
 
-    margin-top: 10px;
-
-    padding: 12px 22px;
-
-    background: #eff6ff;
-
-    color: #2563eb;
-
-    border: 1px solid #bfdbfe;
-
-    border-radius: 9px;
+/* Labels */
+body:has(#certificateInput) .certificate-card p strong {
+    color: #0f172a;
 
     font-weight: 700;
-
-    text-decoration: none;
-
-    transition: 0.2s ease;
 }
 
-#verifyLink:hover {
-    background: #2563eb;
+
+/* Values */
+body:has(#certificateInput) .certificate-card p span {
+    color: #334155;
+
+    text-align: right;
+}
+
+
+/* =========================================================
+   VALID STATUS
+========================================================= */
+
+body:has(#certificateInput) .certificate-status {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 7px 13px;
+
+    border-radius: 999px;
+
+    background: #ecfdf5;
+
+    color: #15803d !important;
+
+    border: 1px solid #bbf7d0;
+
+    font-size: 14px;
+
+    font-weight: 800;
+}
+
+body:has(#certificateInput) .certificate-status::before {
+    content: "✓";
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 20px;
+
+    height: 20px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
 
     color: white;
+
+    font-size: 12px;
 }
 
 
-/* ================================
-   CERTIFICATE PAGE
-================================ */
+/* =========================================================
+   VIEW CERTIFICATE BUTTON
+========================================================= */
 
-.certificate {
-    width: min(1000px, 92%);
+body:has(#certificateInput) .certificate-card button {
+    margin-top: 28px;
 
-    margin: 50px auto;
-
-    padding: 60px;
-
-    background: white;
-
-    border: 12px solid #2563eb;
-
-    border-radius: 8px;
-
-    text-align: center;
-
-    box-shadow:
-        0 25px 60px rgba(15, 23, 42, 0.15);
-}
-
-.certificate h1 {
-    font-size: 44px;
-
-    color: #2563eb;
-
-    margin-bottom: 25px;
-}
-
-.certificate h2 {
-    font-size: 38px;
-
-    margin: 25px 0;
-
-    color: #111827;
-}
-
-.certificate h3 {
-    font-size: 25px;
-
-    margin: 20px 0 30px;
-
-    color: #334155;
-}
-
-.certificate p {
-    font-size: 18px;
-
-    margin: 12px 0;
-}
-
-.certificate #certificateId {
-    color: #2563eb;
-}
-
-.certificate #qrcode {
-    margin: 30px auto;
-}
-
-
-/* ================================
-   CERTIFICATE BUTTONS
-================================ */
-
-.certificate button {
-    margin: 20px 8px 0;
-
-    padding: 14px 25px;
+    padding: 13px 24px;
 
     border: none;
 
-    border-radius: 9px;
+    border-radius: 10px;
 
-    background: #2563eb;
+    background: #0f172a;
 
     color: white;
 
@@ -1035,59 +409,153 @@ body {
 
     cursor: pointer;
 
-    transition: 0.2s ease;
+    transition: all 0.2s ease;
 }
 
-.certificate button:hover {
-    background: #1d4ed8;
+body:has(#certificateInput) .certificate-card button:hover {
+    background: #2563eb;
 
     transform: translateY(-2px);
 }
 
 
-/* ================================
+/* =========================================================
+   INVALID CERTIFICATE
+========================================================= */
+
+body:has(#certificateInput) .invalid-certificate {
+    width: min(700px, 92%);
+
+    margin: 25px auto;
+
+    padding: 25px;
+
+    border-radius: 15px;
+
+    background: #fff1f2;
+
+    border: 1px solid #fecdd3;
+
+    color: #be123c;
+
+    text-align: center;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+    margin-top: 70px;
+
+    padding: 25px;
+
+    background: #0f172a;
+
+    color: #94a3b8;
+
+    text-align: center;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
    MOBILE
-================================ */
+========================================================= */
 
 @media (max-width: 700px) {
 
-    .container {
-        margin: 25px auto;
+    .navbar {
+        padding: 14px 20px;
 
-        padding: 25px;
+        flex-direction: column;
+
+        gap: 10px;
     }
 
-    .container h1 {
-        font-size: 30px;
+    .nav-links {
+        gap: 4px;
     }
 
-    #certificateForm {
-        grid-template-columns: 1fr;
+    .nav-links a {
+        padding: 8px 11px;
+
+        font-size: 14px;
     }
 
-    #certificateForm label {
-        grid-column: span 1;
+    body:has(#certificateInput) h1 {
+        margin-top: 35px;
+
+        font-size: 32px;
     }
 
-    #certificateForm button {
-        grid-column: span 1;
+    body:has(#certificateInput) h1 + p {
+        padding: 0 20px;
+
+        font-size: 15px;
     }
 
-    .certificate {
-        padding: 30px 18px;
+    body:has(#certificateInput) form {
+        flex-direction: column;
 
-        border-width: 7px;
+        padding: 14px;
     }
 
-    .certificate h1 {
-        font-size: 30px;
+    #certificateInput {
+        width: 100%;
     }
 
-    .certificate h2 {
+    body:has(#certificateInput) form button {
+        width: 100%;
+    }
+
+    body:has(#certificateInput) .certificate-card {
+        padding: 25px 20px;
+
+        border-radius: 16px;
+    }
+
+    body:has(#certificateInput) .certificate-card h2 {
+        font-size: 25px;
+    }
+
+    body:has(#certificateInput) .certificate-card p {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 5px;
+
+        font-size: 15px;
+    }
+
+    body:has(#certificateInput) .certificate-card p span {
+        text-align: left;
+    }
+}
+
+
+/* =========================================================
+   SMALL SCREEN
+========================================================= */
+
+@media (max-width: 400px) {
+
+    .logo {
+        font-size: 19px;
+    }
+
+    .nav-links a {
+        font-size: 13px;
+
+        padding: 7px 9px;
+    }
+
+    body:has(#certificateInput) h1 {
         font-size: 28px;
-    }
-
-    .certificate h3 {
-        font-size: 21px;
     }
 }
