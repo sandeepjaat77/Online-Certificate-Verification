@@ -1,149 +1,242 @@
-const certificateForm = document.getElementById("certificateForm");
-
-certificateForm.addEventListener("submit", async (event) => {
-
-    event.preventDefault();
-
-    const recipientName =
-        document.getElementById("recipientName").value;
-
-    const recipientEmail =
-        document.getElementById("recipientEmail").value;
-
-    const courseName =
-        document.getElementById("courseName").value;
-
-    const expiryDate =
-        document.getElementById("expiryDate").value;
+const certificateForm =
+    document.getElementById("certificateForm");
 
 
-    const userData =
-        localStorage.getItem("user");
+certificateForm.addEventListener(
+    "submit",
+    async (event) => {
+
+        event.preventDefault();
 
 
-    if (!userData) {
-
-        alert("Please login first");
-
-        window.location.href =
-            "login.html";
-
-        return;
-
-    }
-
-
-    const user =
-        JSON.parse(userData);
-
-    const token =
-        localStorage.getItem("token");
-
-
-    try {
-
-        const response =
-            await fetch(
-                "http://localhost:5000/api/certificates",
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json",
-
-                        "Authorization":
-                            "Bearer " + token
-                    },
-
-                    body: JSON.stringify({
-                        recipientName,
-                        recipientEmail,
-                        courseName,
-                        expiryDate,
-                    
-                    })
-                }
-            );
-
-
-        const data =
-            await response.json();
-
-
-        if (response.ok) {
-
-            const certificateId =
-                data.certificate.certificateId;
-
-
+        const recipientName =
             document.getElementById(
-                "message"
-            ).innerText =
-                "Certificate created successfully! Certificate ID: "
-                + certificateId;
+                "recipientName"
+            ).value.trim();
 
 
+        const recipientEmail =
             document.getElementById(
-                "message"
-            ).style.color =
-                "green";
+                "recipientEmail"
+            ).value.trim();
 
 
-            // Generate QR Code         😒
-
-           const verifyUrl = "http://10.97.14.53:5500/frontent/verify.html?id="
-                 + certificateId;
-
-
+        const courseName =
             document.getElementById(
-                "qrcode"
-            ).innerHTML = "";
+                "courseName"
+            ).value.trim();
 
 
-            new QRCode(
-                document.getElementById(
-                    "qrcode"
-                ),
-                verifyUrl
-            );
-
-
-            // Clear form
-
-            certificateForm.reset();
-
-
-        } else {
-
+        const expiryDate =
             document.getElementById(
-                "message"
-            ).innerText =
-                data.message;
+                "expiryDate"
+            ).value;
 
 
-            document.getElementById(
-                "message"
-            ).style.color =
-                "red";
+        const userData =
+            localStorage.getItem("user");
+
+
+        if (!userData) {
+
+            alert("Please login first");
+
+            window.location.href =
+                "login.html";
+
+            return;
 
         }
 
 
-    } catch (error) {
+        let user;
 
-        console.log(error);
+        try {
 
-        document.getElementById(
-            "message"
-        ).innerText =
-            "Unable to connect to server";
+            user =
+                JSON.parse(userData);
 
-        document.getElementById(
-            "message"
-        ).style.color =
-            "red";
+        } catch (error) {
+
+            console.log(error);
+
+            localStorage.removeItem("user");
+            localStorage.removeItem("token");
+
+            alert("Please login again");
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+        const token =
+            localStorage.getItem("token");
+
+
+        if (!token) {
+
+            alert("Please login first");
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+        // Only issuer can create certificates
+
+        if (user.role !== "issuer") {
+
+            alert(
+                "Only issuers can create certificates"
+            );
+
+            window.location.href =
+                "index.html";
+
+            return;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "https://online-certificate-verification-owsv.onrender.com/api/certificates",
+                    {
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "Authorization":
+                                "Bearer " + token
+
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                recipientName,
+
+                                recipientEmail,
+
+                                courseName,
+
+                                expiryDate
+
+                            })
+
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (response.ok) {
+
+                const certificateId =
+                    data.certificate.certificateId;
+
+
+                const message =
+                    document.getElementById(
+                        "message"
+                    );
+
+
+                message.innerText =
+                    "Certificate created successfully! Certificate ID: "
+                    + certificateId;
+
+
+                message.style.color =
+                    "green";
+
+
+                // Generate QR Code
+
+                const verifyUrl =
+                    window.location.origin +
+                    "/verify.html?id=" +
+                    encodeURIComponent(
+                        certificateId
+                    );
+
+
+                const qrCode =
+                    document.getElementById(
+                        "qrcode"
+                    );
+
+
+                qrCode.innerHTML = "";
+
+
+                new QRCode(
+                    qrCode,
+                    {
+                        text: verifyUrl,
+
+                        width: 150,
+
+                        height: 150
+                    }
+                );
+
+
+                // Clear form
+
+                certificateForm.reset();
+
+            } else {
+
+                const message =
+                    document.getElementById(
+                        "message"
+                    );
+
+
+                message.innerText =
+                    data.message ||
+                    "Certificate creation failed";
+
+
+                message.style.color =
+                    "red";
+
+            }
+
+        } catch (error) {
+
+            console.log(error);
+
+
+            const message =
+                document.getElementById(
+                    "message"
+                );
+
+
+            message.innerText =
+                "Unable to connect to server";
+
+
+            message.style.color =
+                "red";
+
+        }
 
     }
-
-});
+);
